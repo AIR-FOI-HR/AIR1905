@@ -17,7 +17,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".GameScreenActivity">
-
+            <intent-filter>
+                /* linije 22 i 23 služe za pokretanje GameScreenActivity-a *\
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 
