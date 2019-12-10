@@ -7,6 +7,9 @@ import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.example.herbertgame.fragments.GameDisplayFragment;
 
 public class GameScreenActivity extends AppCompatActivity {
 
@@ -15,5 +18,17 @@ public class GameScreenActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
+   
+        setContentView(R.layout.game_screen_activity);
+
+        createGameViewFragment();
+    }
+
+    private void createGameViewFragment(){
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+
+        ft.replace(R.id.gameView, new GameDisplayFragment());
+
+        ft.commit();
     }
 }
