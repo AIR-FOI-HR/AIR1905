@@ -2,4 +2,5 @@
     <string name="app_name">HerbertGame</string>
     <string name="facebook_app_id">2208315916135784</string>
     <string name="fb_login_protocol_scheme">fb2208315916135784</string>
+    <string name="title_activity_login">LoginActivity</string>
 </resources>
