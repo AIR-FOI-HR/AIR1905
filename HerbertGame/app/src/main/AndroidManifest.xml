@@ -16,9 +16,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".GameScreenActivity">
+        <activity android:name=".GameScreenActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                /* linije 22 i 23 služe za pokretanje GameScreenActivity-a *\
+                <!--  linije 22 i 23 sluze za pokretanje GameScreenActivity-a />-->
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
