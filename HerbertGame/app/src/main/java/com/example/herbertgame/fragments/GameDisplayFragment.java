@@ -13,14 +13,29 @@ import com.example.herbertgame.GameView;
 
 public class GameDisplayFragment extends Fragment {
 
+    private GameView gameView = null;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return new GameView(container.getContext());
+        gameView = new GameView(container.getContext());
+        return gameView;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        gameView.pause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        gameView.resume();
     }
 }
