@@ -4,7 +4,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-import hr.foi.air.herbert.engine.logic.PlayHerbert;
+//import hr.foi.air.herbert.engine.logic.PlayHerbert;
 
 /**
  * Created by filkamilip on 20.04.17..
@@ -47,14 +47,14 @@ public class TerrainList extends ArrayList<Terrain> {
         return this.get(index);
     }
 
-    public void playHerbertStepByStep(PlayHerbert playHerbert, String codeString){
+    /*public void playHerbertStepByStep(PlayHerbert playHerbert, String codeString){
         Log.d("TerrainList", "Moram reproducirat sve korake herberta");
         //TODO: Dodati odgodu crtanja
         for (Terrain terrain : instance) {
             Log.d("TerrainList", "PlayHerbert! Reproduciraj korak!");
             playHerbert.playHerbertStep(terrain);
         }
-    }
+    }*/
     /**
      * Returns number of items in the list collection.
      * @return
