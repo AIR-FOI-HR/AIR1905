@@ -5,13 +5,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
+import android.graphics.Color;
+import android.graphics.Paint;
+
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 
 public class GameView extends SurfaceView implements Runnable {
 
-    private Bitmap bmp;
     private SurfaceHolder holder;
     volatile boolean playing;
     Thread gameThread = null;
@@ -19,7 +21,6 @@ public class GameView extends SurfaceView implements Runnable {
     public GameView(Context context) {
         super(context);
         holder = getHolder();
-        bmp = BitmapFactory.decodeResource(getResources(), R.drawable.dog);
     }
 
     @Override
@@ -29,26 +30,58 @@ public class GameView extends SurfaceView implements Runnable {
 
     @Override
     public void run() {
-        float xOffset = 1;
-        float yOffset = 1;
-        float yDirection = 5;
-        float xDirection = 6;
+        Terrain currentTerrain = new Terrain(20);
+        int terrainSize = currentTerrain.getSize();
+
+        Paint wallPaint = new Paint();
+        Paint foodPaint = new Paint();
+        Paint herbertPaint = new Paint();
+        Paint poisonPaint = new Paint();
+
+
+        herbertPaint.setColor(Color.BLUE);
+        foodPaint.setColor(Color.GREEN);
+        wallPaint.setColor(Color.BLACK);
+        poisonPaint.setColor(Color.RED);
+
         while(playing){
             if(!holder.getSurface().isValid())
                 continue;
             else{
                 Canvas canvas = holder.lockCanvas();
-                canvas.drawRGB(100, 200 ,100);
-                canvas.drawBitmap(bmp, xOffset, yOffset, null);
-                if(yOffset + bmp.getHeight() >= canvas.getHeight() || yOffset < 0){
-                    yDirection *= -1;
-                }
-                if(xOffset + bmp.getWidth() >= canvas.getWidth() || xOffset < 0){
-                    xDirection *= -1;
+                canvas.drawRGB(200, 200 ,200);
+
+                int xSpacing = canvas.getWidth() / terrainSize;
+                int ySpacing = canvas.getHeight() / terrainSize;
+
+                for(int i = 0; i < currentTerrain.getSize(); i++){
+                    for(int j = 0; j < currentTerrain.getSize(); j++){
+                        float xStart = i * xSpacing;
+                        float yStart = j * ySpacing;
+
+                        switch (currentTerrain.getMark(i, j).getMark()){
+                            case TerrainMark.Prazno :
+                                break;
+
+                            case TerrainMark.Zid :
+                                canvas.drawRect(xStart, yStart, xStart + xSpacing, yStart + ySpacing, new Paint());
+                                break;
+
+                            case TerrainMark.Hrana:
+                                canvas.drawRect(xStart, yStart, xStart + xSpacing, yStart + ySpacing, foodPaint);
+                                break;
+
+                            case TerrainMark.Herbert:
+                                canvas.drawRect(xStart, yStart, xStart + xSpacing, yStart + ySpacing, herbertPaint);
+                                break;
+
+                            case TerrainMark.Otrov:
+                                canvas.drawRect(xStart, yStart, xStart + xSpacing, yStart + ySpacing, poisonPaint);
+                                break;
+                        }
+                    }
                 }
                 holder.unlockCanvasAndPost(canvas);
-                yOffset += yDirection;
-                xOffset += xDirection;
             }
         }
     }
@@ -67,8 +100,5 @@ public class GameView extends SurfaceView implements Runnable {
         playing = true;
         gameThread = new Thread(this);
         gameThread.start();
-
     }
-
-
 }
