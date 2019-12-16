@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
 
-        setContentView(R.layout.login_activity_facebook);
+        setContentView(R.layout.login_activity);
 
         loginButton = findViewById(R.id.login_button);
         txtName = findViewById(R.id.profile_name);
@@ -93,7 +93,8 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
-        setContentView(R.layout.login_activity_google);
+
+
 
         signInButton = findViewById(R.id.google_sign_in_button);
 
@@ -193,6 +194,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
+            Toast.makeText(LoginActivity.this, "User Logged in", Toast.LENGTH_LONG).show();
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             // Signed in successfully, show authenticated UI.
@@ -202,7 +204,9 @@ public class LoginActivity extends AppCompatActivity {
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Toast.makeText(LoginActivity.this, "error", Toast.LENGTH_LONG).show();
             Log.w("Error", "signInResult:failed code=" + e.getStatusCode());
+
         }
     }
 }

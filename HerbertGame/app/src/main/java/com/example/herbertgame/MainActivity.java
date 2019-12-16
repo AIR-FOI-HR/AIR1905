@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button loginFb;
+
     Button login;
 
     @Override
@@ -27,14 +27,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        loginFb = findViewById(R.id.button2);
-        loginFb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
-            }
-        });
+
 
     }
 
