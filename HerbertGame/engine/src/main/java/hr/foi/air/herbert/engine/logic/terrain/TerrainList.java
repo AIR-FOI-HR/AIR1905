@@ -4,7 +4,8 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-import hr.foi.air.herbert.engine.logic.PlayHerbert;
+import hr.foi.air.herbert.engine.common.interfaces.PlayHerbert;
+
 
 /**
  * Created by filkamilip on 20.04.17..
