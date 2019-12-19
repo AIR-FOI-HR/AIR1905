@@ -11,7 +11,11 @@ import android.graphics.Paint;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.io.IOException;
+
+import hr.foi.air.herbert.engine.common.events.OnGameControllerListener;
 import hr.foi.air.herbert.engine.logic.terrain.Terrain;
+import hr.foi.air.herbert.engine.logic.terrain.TerrainLogic;
 import hr.foi.air.herbert.engine.logic.terrain.TerrainMark;
 
 
@@ -33,30 +37,31 @@ public class GameView extends SurfaceView implements Runnable {
 
     @Override
     public void run() {
-        Terrain currentTerrain = new Terrain(20);
-        int terrainSize = currentTerrain.getSize();
 
-        currentTerrain.setMark(10, 6, TerrainMark.Hrana);
+        TerrainLogic terrainLogic = TerrainLogic.getInstance(new OnGameControllerListener() {
+            @Override
+            public void OnLevelSolved(int levelScore) {
 
-        currentTerrain.setMark(16, 17, TerrainMark.Otrov);
+            }
 
+            @Override
+            public void OnCodeWithError(String error) {
 
-        currentTerrain.setMark(3, 2, TerrainMark.Zid);
-        currentTerrain.setMark(3, 3, TerrainMark.Zid);
-        currentTerrain.setMark(3, 4, TerrainMark.Zid);
-        currentTerrain.setMark(3, 5, TerrainMark.Zid);
-        currentTerrain.setMark(4, 5, TerrainMark.Zid);
-        currentTerrain.setMark(5, 5, TerrainMark.Zid);
-        currentTerrain.setMark(12, 8, TerrainMark.Zid);
-        currentTerrain.setMark(12, 9, TerrainMark.Zid);
-        currentTerrain.setMark(12, 10, TerrainMark.Zid);
-        currentTerrain.setMark(11, 10, TerrainMark.Zid);
-        currentTerrain.setMark(11, 11, TerrainMark.Zid);
-        currentTerrain.setMark(11, 12, TerrainMark.Zid);
+            }
+        });
 
-        currentTerrain.setMark(9, 9, TerrainMark.Herbert);
+        terrainLogic.setLevelName("nesto");
+        terrainLogic.setTerrainSize(15);
 
+        Terrain terrain = null;
 
+        try {
+            terrain = terrainLogic.loadCurrentLevelTerrain(this.getContext());
+        }catch (IOException e){
+
+        }
+
+        int terrainSize = terrain.getSize();
 
         Paint wallPaint = new Paint();
         Paint foodPaint = new Paint();
@@ -79,15 +84,14 @@ public class GameView extends SurfaceView implements Runnable {
                 int xSpacing = canvas.getWidth() / terrainSize;
                 int ySpacing = canvas.getHeight() / terrainSize;
 
-                for(int i = 0; i < currentTerrain.getSize(); i++){
-                    for(int j = 0; j < currentTerrain.getSize(); j++){
+                for(int i = 0; i < terrainSize; i++){
+                    for(int j = 0; j < terrainSize; j++){
                         float xStart = i * xSpacing;
                         float yStart = j * ySpacing;
 
-                        switch (currentTerrain.getMark(i, j).getMark()){
+                        switch (terrain.getMark(j, i).getMark()){
                             case TerrainMark.Prazno :
                                 break;
-
                             case TerrainMark.Zid :
                                 canvas.drawRect(xStart, yStart, xStart + xSpacing, yStart + ySpacing, new Paint());
                                 break;
