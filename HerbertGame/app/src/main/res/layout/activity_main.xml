@@ -5,27 +5,84 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:background="#e5e5e5"
     android:gravity="center"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
-
-
-
     <Button
+        android:id="@+id/go_to_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/go_to_login"
+        android:background="#ffffff"
         android:text="Login"
+        android:textColor="#2b46c9"
+        app:layout_constraintBaseline_toBaselineOf="@+id/go_to_signout"
+        app:layout_constraintStart_toStartOf="@+id/group"
         tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/go_to_signout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="#ffffff"
         android:text="Sign out"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="88dp"
-        tools:layout_editor_absoluteY="0dp" />
+        android:textColor="#2b46c9"
+        app:layout_constraintStart_toEndOf="@+id/go_to_login"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/go_to_levels"
+        android:layout_width="161dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="108dp"
+        android:background="#ffffff"
+        android:text="levels"
+        android:textColor="#2b46c9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_herbert" />
+
+    <Button
+        android:id="@+id/exit_app"
+        android:layout_width="122dp"
+        android:layout_height="53dp"
+        android:layout_marginStart="152dp"
+        android:layout_marginLeft="152dp"
+        android:layout_marginTop="536dp"
+        android:background="#ffffff"
+        android:text="Exit"
+        android:textColor="#2b46c9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_herbert"
+        android:layout_width="0dp"
+        android:layout_height="67dp"
+        android:layout_marginStart="51dp"
+        android:layout_marginLeft="51dp"
+        android:layout_marginTop="128dp"
+        android:layout_marginEnd="51dp"
+        android:layout_marginRight="51dp"
+        android:text="H E R B E R T"
+        android:textAlignment="center"
+        android:textColor="#2b46c9"
+        android:textSize="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
