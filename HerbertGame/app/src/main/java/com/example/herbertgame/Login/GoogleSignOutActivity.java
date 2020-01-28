@@ -1,6 +1,5 @@
-package com.example.herbertgame.GoogleLogin;
+package com.example.herbertgame.Login;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;

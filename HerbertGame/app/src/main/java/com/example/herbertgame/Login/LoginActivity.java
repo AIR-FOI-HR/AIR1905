@@ -1,4 +1,4 @@
-package com.example.herbertgame;
+package com.example.herbertgame.Login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.herbertgame.GoogleLogin.GoogleSignOutActivity;
+import com.example.herbertgame.MainActivity;
+import com.example.herbertgame.R;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -51,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
     SignInButton signInButton;
     GoogleSignInClient mGoogleSignInClient;
 
+    private boolean isSignedIn;
 
     @Override
     protected void onStart() {
@@ -115,6 +117,19 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        if ((accessToken != null && !accessToken.isExpired()) || account != null){
+            isSignedIn = true;
+        }
+        else isSignedIn = false;
+
+        if(isSignedIn){
+            signInButton.setVisibility(View.GONE);
+        }
     }
 
     private void signIn(){
@@ -191,7 +206,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             Toast.makeText(LoginActivity.this, "User Logged in", Toast.LENGTH_LONG).show();
@@ -199,7 +213,7 @@ public class LoginActivity extends AppCompatActivity {
 
             // Signed in successfully, show authenticated UI.
             //pokreće GoogleSignOutActivity;  POTREBNO PROMIJENITI u neki drugi kasnije!!!
-            Intent intent = new Intent(LoginActivity.this, GoogleSignOutActivity.class);
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.

@@ -7,18 +7,35 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.herbertgame.Login.GoogleSignOutActivity;
+import com.example.herbertgame.Login.LoginActivity;
+import com.facebook.AccessToken;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+
 public class MainActivity extends AppCompatActivity {
 
 
     Button login;
+    Button signOut;
+
+    private boolean isSignedIn;
 
     @Override
     public void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        if ((accessToken != null && !accessToken.isExpired()) || account != null){
+            isSignedIn = true;
+        }
+        else isSignedIn = false;
 
         login = findViewById(R.id.go_to_login);
+        signOut = findViewById(R.id.go_to_signout);
+
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -27,8 +44,80 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        signOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AccessToken accessToken = AccessToken.getCurrentAccessToken();
+
+                if(accessToken != null && !accessToken.isExpired())  //ako je ulogiran na Facebook
+                {
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }
+                else //ako je ulogiran na Google
+                {
+                    Intent intent = new Intent(MainActivity.this, GoogleSignOutActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
 
 
+        if(isSignedIn){
+            login.setVisibility(View.GONE);
+            signOut.setVisibility(View.VISIBLE);
+        }
+        else{
+            signOut.setVisibility(View.GONE);
+            login.setVisibility(View.VISIBLE);
+        }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        if ((accessToken != null && !accessToken.isExpired()) || account != null){
+            isSignedIn = true;
+        }
+        else isSignedIn = false;
+
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        signOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AccessToken accessToken = AccessToken.getCurrentAccessToken();
+
+                if(accessToken != null && !accessToken.isExpired())  //ako je ulogiran na Facebook
+                {
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }
+                else //ako je ulogiran na Google
+                {
+                    Intent intent = new Intent(MainActivity.this, GoogleSignOutActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+
+
+        if(isSignedIn){
+            login.setVisibility(View.GONE);
+            signOut.setVisibility(View.VISIBLE);
+        }
+        else{
+            signOut.setVisibility(View.GONE);
+            login.setVisibility(View.VISIBLE);
+        }
+    }
 }
