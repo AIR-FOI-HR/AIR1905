@@ -10,9 +10,11 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.ui.AppBarConfiguration;
 
+import com.google.android.material.textfield.TextInputLayout;
+
 public class GameScreenActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
-    private AppBarConfiguration conf;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +26,7 @@ public class GameScreenActivity extends AppCompatActivity {
         ActionBarDrawerToggle toogle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toogle);
         toogle.syncState();
+
 
     }
     @Override
