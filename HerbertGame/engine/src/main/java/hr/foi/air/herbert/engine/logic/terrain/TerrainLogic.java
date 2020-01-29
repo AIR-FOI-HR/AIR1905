@@ -3,6 +3,7 @@ package hr.foi.air.herbert.engine.logic.terrain;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -172,7 +173,7 @@ public class TerrainLogic {
     Following methods are used for moving and rotating Herbert
      */
     public void move(int terrainSize, TerrainMark mark, Terrain t){
-        t.setMark(X, Y, mark.getMark()-256);
+        t.setMark(X, Y, mark.getMark()-255);
         boolean zid = false;
 
         switch(orientation){
@@ -244,9 +245,9 @@ public class TerrainLogic {
         /*
         Ovo treba provjeriti
          */
-        t.setMark(X,Y,t.getMark(X,Y).getMark()+256);
+        t.setMark(X,Y,TerrainMark.Herbert);
 
-        if (zid) return;
+        //if (zid) return;
         switch(orientation){
             case Up:
                 if ((t.getMark(X,Y).getMark() & TerrainMark.Up) != TerrainMark.Up)
