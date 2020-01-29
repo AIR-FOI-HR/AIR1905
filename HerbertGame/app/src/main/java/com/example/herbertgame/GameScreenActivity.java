@@ -22,19 +22,32 @@ public class GameScreenActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
    
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        Bundle extras = getIntent().getExtras();
+
+        String levelName = extras.getString("levelName");
+
         setContentView(R.layout.game_screen_activity);
 
-        createGameViewFragment();
+        createGameViewFragment(levelName);
     }
 
-    private void createGameViewFragment(){
+    private void createGameViewFragment(String levelName){
+        Bundle bundle = new Bundle();
+        bundle.putString("levelName", levelName);
+        GameDisplayFragment gameDisplayFragment = new GameDisplayFragment();
+        gameDisplayFragment.setArguments(bundle);
+
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-
-        ft.replace(R.id.gameView, new GameDisplayFragment());
-
+        ft.replace(R.id.gameView, gameDisplayFragment);
         ft.commit();
 
         setContentView(R.layout.game_screen_activity);
