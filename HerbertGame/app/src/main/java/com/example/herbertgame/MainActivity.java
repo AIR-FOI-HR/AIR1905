@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     Button login;
     Button signOut;
     Button exit;
+    Button levels;
 
     private boolean isSignedIn;
 
@@ -26,6 +27,15 @@ public class MainActivity extends AppCompatActivity {
     public void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        levels = findViewById(R.id.go_to_levels);
+        levels.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, LevelListActivity.class);
+                startActivity(intent);
+            }
+        });
 
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
