@@ -51,6 +51,7 @@
 
         <activity android:name=".Login.GoogleSignOutActivity" />
         <activity android:name=".GameScreenActivity"></activity>
+        <activity android:name=".LevelListActivity"></activity>
     </application>
 
 </manifest>
