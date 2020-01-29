@@ -4,7 +4,11 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+<<<<<<< HEAD
 //import hr.foi.air.herbert.engine.logic.PlayHerbert;
+=======
+import hr.foi.air.herbert.engine.common.interfaces.PlayHerbert;
+>>>>>>> Prikaz-grafike-levela
 
 /**
  * Created by filkamilip on 20.04.17..
@@ -51,6 +55,12 @@ public class TerrainList extends ArrayList<Terrain> {
         Log.d("TerrainList", "Moram reproducirat sve korake herberta");
         //TODO: Dodati odgodu crtanja
         for (Terrain terrain : instance) {
+            try {
+                Thread.sleep(150);
+            } catch (InterruptedException e) {
+                Log.i("tereni", "playHerbertStepByStep: exception");
+                e.printStackTrace();
+            }
             Log.d("TerrainList", "PlayHerbert! Reproduciraj korak!");
             playHerbert.playHerbertStep(terrain);
         }

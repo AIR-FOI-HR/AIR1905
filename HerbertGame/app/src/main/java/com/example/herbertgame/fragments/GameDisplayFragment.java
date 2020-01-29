@@ -19,6 +19,8 @@ public class GameDisplayFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         gameView = new GameView(container.getContext());
+        String levelName = getArguments().getString("levelName");
+        gameView.setLevelName(levelName);
         return gameView;
     }
 
@@ -35,7 +37,7 @@ public class GameDisplayFragment extends Fragment {
 
     @Override
     public void onResume() {
+        gameView.resume("");
         super.onResume();
-        gameView.resume();
     }
 }
