@@ -46,7 +46,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Login.GoogleSignOutActivity" />
+        <activity android:name=".GoogleLogin.GoogleSignOutActivity" />
+        <activity android:name=".GameScreenActivity"></activity>
+        <activity android:name=".LevelListActivity"></activity>
     </application>
 
 </manifest>
