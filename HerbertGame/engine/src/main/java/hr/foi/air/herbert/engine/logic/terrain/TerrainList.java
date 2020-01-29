@@ -52,6 +52,12 @@ public class TerrainList extends ArrayList<Terrain> {
         Log.d("TerrainList", "Moram reproducirat sve korake herberta");
         //TODO: Dodati odgodu crtanja
         for (Terrain terrain : instance) {
+            try {
+                Thread.sleep(150);
+            } catch (InterruptedException e) {
+                Log.i("tereni", "playHerbertStepByStep: exception");
+                e.printStackTrace();
+            }
             Log.d("TerrainList", "PlayHerbert! Reproduciraj korak!");
             playHerbert.playHerbertStep(terrain);
         }
