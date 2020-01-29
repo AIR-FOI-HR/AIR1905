@@ -19,12 +19,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".GameScreenActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -46,7 +40,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".GoogleLogin.GoogleSignOutActivity" />
+        <activity android:name=".Login.GoogleSignOutActivity" />
         <activity android:name=".GameScreenActivity"></activity>
         <activity android:name=".LevelListActivity"></activity>
     </application>
