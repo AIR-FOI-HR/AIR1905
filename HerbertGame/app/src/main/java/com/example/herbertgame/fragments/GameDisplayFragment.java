@@ -40,4 +40,8 @@ public class GameDisplayFragment extends Fragment {
         gameView.resume("");
         super.onResume();
     }
+
+    public void playSteps(String code){
+        gameView.playSteps(code);
+    }
 }
