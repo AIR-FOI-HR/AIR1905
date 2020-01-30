@@ -1,6 +1,7 @@
 package com.example.herbertgame;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -21,6 +22,7 @@ public class GameScreenActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private Button startButton;
     private EditText codeInput;
+    private GameDisplayFragment gameDisplayFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,6 +49,8 @@ public class GameScreenActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //akcija nakon klika na gumb, uzima se tekst i salje dalje
+                String herbertCode = codeInput.getText().toString();
+                gameDisplayFragment.playSteps(herbertCode);
             }
         });
     }
@@ -54,7 +58,7 @@ public class GameScreenActivity extends AppCompatActivity {
     private void createGameViewFragment(String levelName) {
         Bundle bundle = new Bundle();
         bundle.putString("levelName", levelName);
-        GameDisplayFragment gameDisplayFragment = new GameDisplayFragment();
+        gameDisplayFragment = new GameDisplayFragment();
         gameDisplayFragment.setArguments(bundle);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
