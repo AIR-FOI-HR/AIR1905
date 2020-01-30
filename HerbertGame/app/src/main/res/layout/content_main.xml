@@ -10,29 +10,38 @@
     <LinearLayout
         android:orientation="vertical" android:layout_width="match_parent"
         android:layout_height="match_parent">
-    <FrameLayout
-        android:id="@+id/gameView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"></FrameLayout>
-    <FrameLayout
-        android:layout_height="match_parent"
-        android:id="@+id/inputView"
-        android:layout_width="match_parent"
-        android:layout_weight="1">
-
-        <com.google.android.material.textfield.TextInputLayout
+        <FrameLayout
+            android:id="@+id/gameView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Code">
+            android:layout_height="match_parent"
+            android:layout_weight="1"></FrameLayout>
+        <FrameLayout
+            android:layout_height="match_parent"
+            android:id="@+id/inputView"
+            android:layout_width="match_parent"
+            android:layout_weight="1">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/HerbertCode"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="73dp" />
+                android:layout_height="65dp"
+                android:orientation="horizontal">
 
-        </com.google.android.material.textfield.TextInputLayout>
-    </FrameLayout>
+                <EditText
+                    android:id="@+id/code_input"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".70"></EditText>
+                <Button
+                    android:id="@+id/start_button"
+                    android:layout_width="0dp"
+                    android:layout_weight=".30"
+                    android:layout_height="55dp"
+                    android:text="Start">
+
+                </Button>
+
+            </LinearLayout>
+        </FrameLayout>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
