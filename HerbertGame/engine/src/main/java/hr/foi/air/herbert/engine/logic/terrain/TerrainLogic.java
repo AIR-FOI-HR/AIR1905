@@ -98,6 +98,7 @@ public class TerrainLogic {
 
     public String parseUserCode(String userCode){
         emptyTerrainList();
+        gameController.resetFoodLeft();
 
         String parseResult = "";
         try {
@@ -195,8 +196,10 @@ public class TerrainLogic {
                     zid = true;
                     break;
                 }
-                else if ((t.getMark(X - 1, Y).getMark() & TerrainMark.Hrana) == TerrainMark.Hrana)
+                else if ((t.getMark(X - 1, Y).getMark() & TerrainMark.Hrana) == TerrainMark.Hrana) {
                     t.incScore();
+                    gameController.foodLeftdec();
+                }
                 else
                     t.decScore();
                 X--;
@@ -209,8 +212,10 @@ public class TerrainLogic {
                     zid = true;
                     break;
                 }
-                else if ((t.getMark(X, Y+1).getMark() & TerrainMark.Hrana) == TerrainMark.Hrana)
+                else if ((t.getMark(X, Y+1).getMark() & TerrainMark.Hrana) == TerrainMark.Hrana) {
                     t.incScore();
+                    gameController.foodLeftdec();
+                }
                 else t.decScore();
                 Y++;
                 break;
@@ -222,8 +227,10 @@ public class TerrainLogic {
                     zid=true;
                     break;
                 }
-                else if ((t.getMark(X + 1, Y).getMark() & TerrainMark.Hrana) == TerrainMark.Hrana)
+                else if ((t.getMark(X + 1, Y).getMark() & TerrainMark.Hrana) == TerrainMark.Hrana) {
                     t.incScore();
+                    gameController.foodLeftdec();
+                }
                 else
                     t.decScore();
                 X++;
@@ -235,8 +242,10 @@ public class TerrainLogic {
                     zid = true;
                     break;
                 }
-                else if ((t.getMark(X, Y - 1).getMark() & TerrainMark.Hrana)==TerrainMark.Hrana)
+                else if ((t.getMark(X, Y - 1).getMark() & TerrainMark.Hrana)==TerrainMark.Hrana) {
                     t.incScore();
+                    gameController.foodLeftdec();
+                }
                 else
                     t.decScore();
                 Y--;
@@ -320,6 +329,7 @@ public class TerrainLogic {
             }
 
             terrainCurrentLevel = terrain;
+            gameController.countFood(terrainCurrentLevel);
             return terrain;
 
         } catch(IOException e) {
