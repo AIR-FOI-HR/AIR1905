@@ -23,23 +23,35 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="65dp"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/code_input"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight=".70"></EditText>
-                <Button
-                    android:id="@+id/start_button"
-                    android:layout_width="0dp"
-                    android:layout_weight=".30"
-                    android:layout_height="55dp"
-                    android:text="Start">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/current_score"
+                    android:text="Current score: 0"></TextView>
 
-                </Button>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="65dp"
+                    android:orientation="horizontal">
 
+                    <EditText
+                        android:id="@+id/code_input"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".70"></EditText>
+                    <Button
+                        android:id="@+id/start_button"
+                        android:layout_width="0dp"
+                        android:layout_weight=".30"
+                        android:layout_height="55dp"
+                        android:text="Start">
+
+                    </Button>
+
+                </LinearLayout>
             </LinearLayout>
         </FrameLayout>
 
