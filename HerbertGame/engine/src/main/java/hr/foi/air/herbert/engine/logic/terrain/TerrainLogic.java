@@ -222,7 +222,7 @@ public class TerrainLogic {
                     zid=true;
                     break;
                 }
-                else if ((t.getMark(X, Y+1).getMark() & TerrainMark.Hrana) == TerrainMark.Hrana)
+                else if ((t.getMark(X + 1, Y).getMark() & TerrainMark.Hrana) == TerrainMark.Hrana)
                     t.incScore();
                 else
                     t.decScore();
@@ -235,7 +235,7 @@ public class TerrainLogic {
                     zid = true;
                     break;
                 }
-                else if ((t.getMark(X, Y - 1).getMark() & TerrainMark.Zid)==TerrainMark.Zid)
+                else if ((t.getMark(X, Y - 1).getMark() & TerrainMark.Hrana)==TerrainMark.Hrana)
                     t.incScore();
                 else
                     t.decScore();
