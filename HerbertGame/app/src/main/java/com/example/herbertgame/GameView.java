@@ -9,6 +9,9 @@ import android.graphics.Paint;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Toast;
+
+import androidx.core.content.res.ResourcesCompat;
 
 import java.io.IOException;
 
@@ -22,7 +25,15 @@ import hr.foi.air.herbert.engine.logic.terrain.TerrainMark;
 
 public class GameView extends SurfaceView implements Runnable {
 
+    final Paint wallPaint = new Paint();
+    final Paint foodPaint = new Paint();
+    final Paint herbertPaint = new Paint();
+    final Paint herbertBackPaint = new Paint();
+    final Paint poisonPaint = new Paint();
+
     private SurfaceHolder holder;
+    Canvas canvas;
+    TerrainMark terrainMarks[][];
     volatile boolean playing;
     volatile boolean running;
     Thread gameThread = null;
@@ -39,12 +50,6 @@ public class GameView extends SurfaceView implements Runnable {
         }
     });
 
-    final Paint wallPaint = new Paint();
-    final Paint foodPaint = new Paint();
-    final Paint herbertPaint = new Paint();
-    final Paint herbertBackPaint = new Paint();
-    final Paint poisonPaint = new Paint();
-
     public GameView(Context context) {
         super(context);
         holder = getHolder();
@@ -57,85 +62,87 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        Log.i("herbertCode", "onDraw");
-    }
-
-    @Override
     public void run() {
         //Metoda za crtanje levela.
         //Izvršava se konstantno
         while(running) {
-
             //Izvršava se samo ako se desila promijena u unesenom kodu
-            if (playing) {
-                terrainList.playHerbertStepByStep(new PlayHerbert() {
-                    @Override
-                    public void playHerbertStep(Terrain terrain) {
-                        Canvas canvas = holder.lockCanvas();
-                        canvas.drawRGB(200, 200, 200);
-
-                        int terrainSize = terrain.getSize();
-
-                        int xSpacing = canvas.getWidth() / terrainSize;
-                        int ySpacing = canvas.getHeight() / terrainSize;
-
-                        for (int i = 0; i < terrainSize; i++) {
-                            for (int j = 0; j < terrainSize; j++) {
-                                float xStart = i * xSpacing;
-                                float yStart = j * ySpacing;
-
-                                //Ako se ne radi o bloku gdje je Herbert
-                                if (terrain.getMark(j, i).getMark() < 256) {
-                                    switch (terrain.getMark(j, i).getMark()) {
-                                        case TerrainMark.Prazno:
-                                            break;
-                                        case TerrainMark.Zid:
-                                            canvas.drawRect(xStart, yStart, xStart + xSpacing, yStart + ySpacing, new Paint());
-                                            break;
-
-                                        case TerrainMark.Hrana:
-                                            canvas.drawRect(xStart, yStart, xStart + xSpacing, yStart + ySpacing, foodPaint);
-                                            break;
-
-                                        case TerrainMark.Otrov:
-                                            canvas.drawRect(xStart, yStart, xStart + xSpacing, yStart + ySpacing, poisonPaint);
-                                            break;
-                                    }
-                                } else {
-                                    switch (terrain.getMark(j, i).getMark() - 256) {
-                                        //Na bloku se nalazi Herbert, treba otkriti u kojoj je orijentaciji
-                                        case 16:
-                                            //Orijentacija UP
-                                            canvas.drawRect(xStart, yStart, xStart + xSpacing, yStart + ySpacing / 2, herbertPaint);
-                                            canvas.drawRect(xStart, yStart + ySpacing / 2, xStart + xSpacing, yStart + ySpacing, herbertBackPaint);
-                                            break;
-                                        case 128:
-                                            //Orijentacija LEFT
-                                            canvas.drawRect(xStart, yStart, xStart + xSpacing / 2, yStart + ySpacing, herbertPaint);
-                                            canvas.drawRect(xStart + xSpacing / 2, yStart, xStart + xSpacing, yStart + ySpacing, herbertBackPaint);
-                                            break;
-                                        case 32:
-                                            //Orijentacija RIGHT
-                                            canvas.drawRect(xStart, yStart, xStart + xSpacing / 2, yStart + ySpacing, herbertBackPaint);
-                                            canvas.drawRect(xStart + xSpacing / 2, yStart, xStart + xSpacing, yStart + ySpacing, herbertPaint);
-                                            break;
-                                        case 64:
-                                            //Orijentacija DOWN
-                                            canvas.drawRect(xStart, yStart, xStart + xSpacing, yStart + ySpacing / 2, herbertBackPaint);
-                                            canvas.drawRect(xStart, yStart + ySpacing / 2, xStart + xSpacing, yStart + ySpacing, herbertPaint);
-                                            break;
-                                    }
-                                }
-                            }
+            while (playing) {
+                if (holder.getSurface().isValid()) {
+                    terrainList.playHerbertStepByStep(new PlayHerbert() {
+                        @Override
+                        public void playHerbertStep(Terrain terrain) {
+                            draw(terrain);
                         }
-                        holder.unlockCanvasAndPost(canvas);
-                    }
-                }, null);
-                playing = false;
+                    }, null);
+                    playing = false;
+                }
             }
         }
+    }
+
+    private void draw(Terrain terrain){
+        canvas = holder.lockCanvas();
+        terrainMarks = terrain.getTerrainMarks();
+        canvas.drawColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimaryDark, null));
+
+        int terrainSize = terrain.getSize();
+
+        int xSpacing = canvas.getWidth() / terrainSize;
+        int ySpacing = canvas.getHeight() / terrainSize;
+
+        for (int i = 0; i < terrainSize; i++) {
+            for (int j = 0; j < terrainSize; j++) {
+                float xStart = i * xSpacing;
+                float yStart = j * ySpacing;
+
+                //Ako se ne radi o bloku gdje je Herbert
+                if (terrainMarks[j][i].getMark() < 256) {
+                    switch (terrainMarks[j][i].getMark()) {
+                        case TerrainMark.Prazno:
+                            break;
+
+                        case TerrainMark.Zid:
+                            canvas.drawRect(xStart, yStart, xStart + xSpacing, yStart + ySpacing, new Paint());
+                            break;
+
+                        case TerrainMark.Hrana:
+                            canvas.drawRect(xStart, yStart, xStart + xSpacing, yStart + ySpacing, foodPaint);
+                            break;
+
+                        case TerrainMark.Otrov:
+                            canvas.drawRect(xStart, yStart, xStart + xSpacing, yStart + ySpacing, poisonPaint);
+                            break;
+                    }
+                } else {
+                    switch (terrainMarks[j][i].getMark() - 256) {
+                        //Na bloku se nalazi Herbert, treba otkriti u kojoj je orijentaciji
+                        case 16:
+                            //Orijentacija UP
+                            canvas.drawRect(xStart, yStart, xStart + xSpacing, yStart + ySpacing / 2, herbertPaint);
+                            canvas.drawRect(xStart, yStart + ySpacing / 2, xStart + xSpacing, yStart + ySpacing, herbertBackPaint);
+                            break;
+                        case 128:
+                            //Orijentacija LEFT
+                            canvas.drawRect(xStart, yStart, xStart + xSpacing / 2, yStart + ySpacing, herbertPaint);
+                            canvas.drawRect(xStart + xSpacing / 2, yStart, xStart + xSpacing, yStart + ySpacing, herbertBackPaint);
+                            break;
+                        case 32:
+                            //Orijentacija RIGHT
+                            canvas.drawRect(xStart, yStart, xStart + xSpacing / 2, yStart + ySpacing, herbertBackPaint);
+                            canvas.drawRect(xStart + xSpacing / 2, yStart, xStart + xSpacing, yStart + ySpacing, herbertPaint);
+                            break;
+                        case 64:
+                            //Orijentacija DOWN
+                            canvas.drawRect(xStart, yStart, xStart + xSpacing, yStart + ySpacing / 2, herbertBackPaint);
+                            canvas.drawRect(xStart, yStart + ySpacing / 2, xStart + xSpacing, yStart + ySpacing, herbertPaint);
+                            break;
+                    }
+                }
+            }
+        }
+
+        holder.unlockCanvasAndPost(canvas);
     }
 
     public void playSteps(String herbertCode){
@@ -144,6 +151,7 @@ public class GameView extends SurfaceView implements Runnable {
         if (herbertCode != "") {
             terrainLogic.parseUserCode(herbertCode);
         }
+        running = true;
         playing = true;
     }
 
@@ -154,7 +162,7 @@ public class GameView extends SurfaceView implements Runnable {
         Terrain initialTerrain = null;
         //Čitanje levela iz datoteke
         try {
-            initialTerrain = terrainLogic.loadCurrentLevelTerrain(this.getContext());
+            initialTerrain = terrainLogic.loadCurrentLevelTerrain(getContext());
         }catch (IOException e){
 
         }
@@ -164,6 +172,11 @@ public class GameView extends SurfaceView implements Runnable {
     public void pause(){
         running = false;
         playing = false;
+
+        Terrain initialTerrain = terrainList.get(0);
+        terrainList.clear();
+        terrainList.add(initialTerrain);
+
         try{
             gameThread.join();
             return;
@@ -173,7 +186,7 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
     public void resume(String code){
-        playSteps("");
+        playSteps(code);
         running = true;
         gameThread = new Thread(this);
         gameThread.start();
