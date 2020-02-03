@@ -1,6 +1,11 @@
 package hr.foi.air.herbert.engine.logic;
 
+import android.util.Log;
+
 import hr.foi.air.herbert.engine.common.events.OnGameControllerListener;
+import hr.foi.air.herbert.engine.logic.terrain.Terrain;
+import hr.foi.air.herbert.engine.logic.terrain.TerrainMark;
+
 /**
  * Created by Filka Milip on 23.10.17..
  *
@@ -26,19 +31,29 @@ public class GameController {
          * This function is temporary here to test PopUp. Function countFood()
          * and initiatePopUpWindow() should not be here in future
          */
-        countFood();
         this.listner = listener;
         startGameTimer();
     }
 
-    public void countFood(){
+    public void countFood(Terrain terrain){
         /*
          * int total is number of total food used for counting
          */
-        int total=0;
+        int total = 0;
         /*
          * Fill with algorithm for counting food
          * */
+
+        TerrainMark terrainMarks[][] = terrain.getTerrainMarks();
+        int terrainSize = terrain.getSize();
+
+
+        for(int i = 0; i < terrainSize; i++){
+            for(int j = 0; j < terrainSize; j++){
+                if((TerrainMark.Hrana & terrainMarks[j][i].getMark()) == TerrainMark.Hrana)
+                    total++;
+            }
+        }
         setFoodLeft(total);
     }
 
@@ -63,9 +78,9 @@ public class GameController {
         this.foodLeft = foodLeft;
     }
 
-    void foodLeftdec(){
+    public void foodLeftdec(){
         foodLeft--;
-        score += 50;
+        Log.i("food-count", "foodLeftdec: " + foodLeft);
         if (foodLeft==0){
             endGameTimer();
             //TODO - Deal with score.
