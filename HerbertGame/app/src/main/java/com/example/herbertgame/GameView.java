@@ -41,12 +41,13 @@ public class GameView extends SurfaceView implements Runnable {
     TerrainLogic terrainLogic = TerrainLogic.getInstance(new OnGameControllerListener() {
         @Override
         public void OnLevelSolved(int levelScore) {
-
+            Log.i("food-count", "OnLevelSolved");
+            Toast.makeText(getContext(), "LEVEL ZAVRŠEN", Toast.LENGTH_LONG).show();
         }
 
         @Override
         public void OnCodeWithError(String error) {
-            Toast.makeText(getContext(), error, Toast.LENGTH_LONG);
+            Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
         }
     });
 
