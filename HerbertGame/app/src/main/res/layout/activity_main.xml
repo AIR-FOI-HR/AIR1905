@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#e5e5e5"
+    android:background="#000066"
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".MainActivity">
@@ -14,8 +14,9 @@
         android:id="@+id/go_to_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#ffffff"
+        android:background="@drawable/roundbutton"
         android:text="Login"
+        android:textStyle="bold"
         android:textColor="#2b46c9"
         app:layout_constraintBaseline_toBaselineOf="@+id/go_to_signout"
         app:layout_constraintStart_toStartOf="@+id/group"
@@ -25,8 +26,9 @@
         android:id="@+id/go_to_signout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#ffffff"
+        android:background="@drawable/roundbutton"
         android:text="Sign out"
+        android:textStyle="bold"
         android:textColor="#2b46c9"
         app:layout_constraintStart_toEndOf="@+id/go_to_login"
         app:layout_constraintTop_toTopOf="parent"
@@ -44,26 +46,28 @@
 
     <Button
         android:id="@+id/go_to_levels"
-        android:layout_width="161dp"
-        android:layout_height="70dp"
+        android:layout_width="91dp"
+        android:layout_height="58dp"
         android:layout_marginTop="108dp"
-        android:background="#ffffff"
-        android:text="levels"
+        android:background="@drawable/playbutton"
+
         android:textColor="#2b46c9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_herbert" />
 
+
     <Button
         android:id="@+id/exit_app"
-        android:layout_width="122dp"
-        android:layout_height="53dp"
-        android:layout_marginStart="152dp"
-        android:layout_marginLeft="152dp"
-        android:layout_marginTop="536dp"
-        android:background="#ffffff"
-        android:text="Exit"
-        android:textColor="#2b46c9"
+        android:layout_width="64dp"
+        android:layout_height="59dp"
+        android:layout_marginStart="328dp"
+        android:layout_marginLeft="328dp"
+        android:layout_marginTop="552dp"
+        android:background="@drawable/yellow"
+
+        android:textColor="#000066"
+        android:textSize="30dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -77,11 +81,23 @@
         android:layout_marginEnd="51dp"
         android:layout_marginRight="51dp"
         android:text="H E R B E R T"
+        android:textStyle="bold"
         android:textAlignment="center"
-        android:textColor="#2b46c9"
+        android:textColor="#ffffff"
         android:textSize="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/robotmessage"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="200dp"
+        android:background="@drawable/robot"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
