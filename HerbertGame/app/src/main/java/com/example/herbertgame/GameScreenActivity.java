@@ -7,22 +7,27 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.herbertgame.fragments.GameDisplayFragment;
 
-public class GameScreenActivity extends AppCompatActivity {
+public class GameScreenActivity extends AppCompatActivity implements GameDisplayFragment.OnCurrentScoreChangeListener{
     private DrawerLayout drawerLayout;
     private Button startButton;
     private EditText codeInput;
     private GameDisplayFragment gameDisplayFragment;
+    private TextView currentScore;
+    private int score;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,6 +48,7 @@ public class GameScreenActivity extends AppCompatActivity {
         createGameViewFragment(levelName);
 
         codeInput = findViewById(R.id.code_input);
+        currentScore = findViewById(R.id.current_score);
 
         startButton = findViewById(R.id.start_button);
         startButton.setOnClickListener(new View.OnClickListener() {
@@ -85,5 +91,19 @@ public class GameScreenActivity extends AppCompatActivity {
             super.onBackPressed();
         }
 
+    }
+
+    @Override
+    public void onAttachFragment(@NonNull Fragment fragment) {
+        if(fragment instanceof GameDisplayFragment){
+            GameDisplayFragment gameDisplayFragment = (GameDisplayFragment) fragment;
+            gameDisplayFragment.setCurrentScoreChangeListener(this);
+        }
+    }
+
+    @Override
+    public void onCurrentScoreChange(int score) {
+        this.score = score;
+        currentScore.setText("Current score: " + score);
     }
 }
