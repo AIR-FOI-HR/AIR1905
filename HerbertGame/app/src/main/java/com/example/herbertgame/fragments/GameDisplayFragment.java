@@ -11,7 +11,12 @@ import androidx.fragment.app.Fragment;
 
 import com.example.herbertgame.GameView;
 
-public class GameDisplayFragment extends Fragment {
+public class GameDisplayFragment extends Fragment implements GameView.OnScoreChangeListener{
+
+    @Override
+    public void onScoreChange(int score) {
+        callback.onCurrentScoreChange(score);
+    }
 
     private GameView gameView = null;
 
@@ -27,6 +32,7 @@ public class GameDisplayFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        gameView.setOnScoreChangeListener(this);
     }
 
     @Override

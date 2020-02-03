@@ -50,6 +50,16 @@ public class GameView extends SurfaceView implements Runnable {
         }
     });
 
+    OnScoreChangeListener callback;
+
+    public void setOnScoreChangeListener(OnScoreChangeListener callback){
+        this.callback = callback;
+    }
+
+    public interface OnScoreChangeListener{
+        public void onScoreChange(int score);
+    }
+
     public GameView(Context context) {
         super(context);
         holder = getHolder();
@@ -73,6 +83,7 @@ public class GameView extends SurfaceView implements Runnable {
                         @Override
                         public void playHerbertStep(Terrain terrain) {
                             draw(terrain);
+                            callback.onScoreChange(terrain.getScore());
                         }
                     }, null);
                     playing = false;
