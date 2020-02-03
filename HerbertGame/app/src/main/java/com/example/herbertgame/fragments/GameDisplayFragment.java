@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,12 +14,23 @@ import com.example.herbertgame.GameView;
 
 public class GameDisplayFragment extends Fragment implements GameView.OnScoreChangeListener{
 
+    public GameView gameView = null;
+
+
     @Override
     public void onScoreChange(int score) {
         callback.onCurrentScoreChange(score);
     }
 
-    private GameView gameView = null;
+    OnCurrentScoreChangeListener callback;
+
+    public void setCurrentScoreChangeListener(OnCurrentScoreChangeListener callback){
+        this.callback = callback;
+    }
+
+    public interface OnCurrentScoreChangeListener{
+        public void onCurrentScoreChange(int currentScore);
+    }
 
     @Nullable
     @Override
@@ -33,6 +45,7 @@ public class GameDisplayFragment extends Fragment implements GameView.OnScoreCha
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         gameView.setOnScoreChangeListener(this);
+
     }
 
     @Override
