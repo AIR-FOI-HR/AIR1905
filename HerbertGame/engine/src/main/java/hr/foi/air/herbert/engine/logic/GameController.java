@@ -16,6 +16,7 @@ import hr.foi.air.herbert.engine.logic.terrain.TerrainMark;
 
 public class GameController {
     private int foodLeft;
+    private int startingFood;
     OnGameControllerListener listner;
     int score;
 
@@ -55,6 +56,9 @@ public class GameController {
             }
         }
         setFoodLeft(total);
+        startingFood = total;
+    public void resetFoodLeft(){
+        setFoodLeft(startingFood);
     }
 
     private void startGameTimer(){

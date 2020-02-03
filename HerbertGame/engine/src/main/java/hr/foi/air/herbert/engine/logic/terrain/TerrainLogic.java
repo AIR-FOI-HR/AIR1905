@@ -98,6 +98,7 @@ public class TerrainLogic {
 
     public String parseUserCode(String userCode){
         emptyTerrainList();
+        gameController.resetFoodLeft();
 
         String parseResult = "";
         try {
