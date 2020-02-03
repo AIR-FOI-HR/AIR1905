@@ -57,6 +57,7 @@ public class GameController {
         }
         setFoodLeft(total);
         startingFood = total;
+    }
     public void resetFoodLeft(){
         setFoodLeft(startingFood);
     }
