@@ -36,7 +36,7 @@ public class GameController {
         startGameTimer();
     }
 
-    public void countFood(Terrain terrain){
+    public void countFood(Terrain terrain, Boolean initial){
         /*
          * int total is number of total food used for counting
          */
@@ -56,7 +56,11 @@ public class GameController {
             }
         }
         setFoodLeft(total);
-        startingFood = total;
+        if(initial) startingFood = total;
+
+        if(total == 0){
+            listner.OnLevelSolved(0);
+        }
     }
     public void resetFoodLeft(){
         setFoodLeft(startingFood);
@@ -89,7 +93,6 @@ public class GameController {
         if (foodLeft==0){
             endGameTimer();
             //TODO - Deal with score.
-            listner.OnLevelSolved(0);
         }
     }
 }
