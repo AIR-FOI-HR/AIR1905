@@ -102,8 +102,15 @@ public class GameScreenActivity extends AppCompatActivity implements GameDisplay
     }
 
     @Override
-    public void onCurrentScoreChange(int score) {
+    public void onCurrentScoreChange(final int score) {
         this.score = score;
-        currentScore.setText("Current score: " + score);
+
+        //Update sučelja mora se odvijati na glavnoj UI dretvi
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                currentScore.setText("Current score: " + score);
+            }
+        });
     }
 }
