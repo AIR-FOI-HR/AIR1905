@@ -23,9 +23,11 @@ public class LevelListActivity extends AppCompatActivity {
         setContentView(R.layout.level_list_activity);
         setTitle("LEVELS");
 
+
+        /*
         String[] levelList = new String[0];
 
-        //Gets level (asset) names into levelList
+        Gets level (asset) names into levelList
         AssetManager levels = this.getAssets();
         try {
             levelList = levels.list("maps");
@@ -34,28 +36,13 @@ public class LevelListActivity extends AppCompatActivity {
         }
 
 
-        //Generates buttons equal to the number of levels
-        for (int i = 1; i <= levelList.length; i++) {
-            Button button = new Button(this);
-            button.setText("Level " + i);
-            button.setId(i);
-            final int id_ = button.getId();
+        String[] levelName = finalLevelList[finalI -1].split("\\."); gets the name of the level into levelName[0]; cuts off the .txt extension
 
-            LinearLayout button_layout = findViewById(R.id.level_button_layout);
-            button_layout.addView(button);
+        Intent intent = new Intent(LevelListActivity.this, GameScreenActivity.class);
+        intent.putExtra("levelName", levelName[0]);  //sends the name of the level to the GameScreenActivity,
+        startActivity(intent);
 
-            final String[] finalLevelList = levelList;
-            final int finalI = i;
-            button.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    String[] levelName = finalLevelList[finalI -1].split("\\."); //gets the name of the level into levelName[0]; cuts off the .txt extension
+        */
 
-                    Intent intent = new Intent(LevelListActivity.this, GameScreenActivity.class);
-                    intent.putExtra("levelName", levelName[0]);  //sends the name of the level to the GameScreenActivity,
-                    startActivity(intent);
-                }
-            });
-
-        }
     }
 }
