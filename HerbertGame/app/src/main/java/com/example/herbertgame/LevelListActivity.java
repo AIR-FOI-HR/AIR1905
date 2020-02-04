@@ -12,22 +12,30 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class LevelListActivity extends AppCompatActivity {
+
+    //variables
+    private ArrayList<String> levelNames = new ArrayList<>();
+    //missing worldRecords, personalBests and levelImages
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.level_list_activity);
-        setTitle("LEVELS");
 
+        this.getLevelNames();
+        this.initLevelRecyclerView();
 
-        /*
+    }
+
+    private void getLevelNames(){
         String[] levelList = new String[0];
-
-        Gets level (asset) names into levelList
         AssetManager levels = this.getAssets();
         try {
             levelList = levels.list("maps");
@@ -35,14 +43,17 @@ public class LevelListActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        for (String level:levelList
+             ) {
+            String[] levelNamesList = level.split("\\.");
+            levelNames.add(levelNamesList[0]);
+        }
+    }
 
-        String[] levelName = finalLevelList[finalI -1].split("\\."); gets the name of the level into levelName[0]; cuts off the .txt extension
-
-        Intent intent = new Intent(LevelListActivity.this, GameScreenActivity.class);
-        intent.putExtra("levelName", levelName[0]);  //sends the name of the level to the GameScreenActivity,
-        startActivity(intent);
-
-        */
-
+    private void initLevelRecyclerView(){
+        RecyclerView recyclerView = findViewById(R.id.level_recycler_view);
+        LevelRecyclerViewAdapter adapter = new LevelRecyclerViewAdapter(levelNames, this );
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 }
