@@ -1,5 +1,6 @@
 package com.example.herbertgame;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 
@@ -42,7 +43,12 @@ public class GameView extends SurfaceView implements Runnable {
         @Override
         public void OnLevelSolved(int levelScore) {
             Log.i("food-count", "OnLevelSolved");
-            Toast.makeText(getContext(), "LEVEL ZAVRŠEN", Toast.LENGTH_LONG).show();
+            ((Activity) getContext()).runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getContext(), "LEVEL ZAVRŠEN", Toast.LENGTH_LONG).show();
+                }
+            });
         }
 
         @Override
