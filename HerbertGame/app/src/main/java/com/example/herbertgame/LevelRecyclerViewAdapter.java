@@ -16,16 +16,24 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.awt.font.TextAttribute;
 import java.util.ArrayList;
+import java.util.List;
 
 public class LevelRecyclerViewAdapter extends RecyclerView.Adapter<LevelRecyclerViewAdapter.LevelViewHolder>{
 
+    private List<ListItem> listItems;
     private ArrayList<String> levelNames;
-    //missing worldRecords, personalBests
+    //missing worldRecords, personalBests; u onoj gore listi bude sve
     private Context context;
 
-    public LevelRecyclerViewAdapter(ArrayList<String> levelNames, Context context) {
+
+    //ovo se doda u kontruktor
+    //List<ListItem> listItems
+    //ArrayList<String> levelNames
+    public LevelRecyclerViewAdapter(List<ListItem> listItems, Context context ,ArrayList<String> levelNames) {
         this.levelNames = levelNames;
         this.context = context;
+
+        this.listItems=listItems;
     }
 
     @NonNull
@@ -39,6 +47,9 @@ public class LevelRecyclerViewAdapter extends RecyclerView.Adapter<LevelRecycler
 
     @Override
     public void onBindViewHolder(@NonNull LevelViewHolder holder, final int position) {
+
+        // ListItem listItem=listItems.get(position);
+
 
         holder.levelName.setText("Level: " + levelNames.get(position));
         //missing worldRecord,personalBest and levelImage
