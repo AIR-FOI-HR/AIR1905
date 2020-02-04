@@ -85,6 +85,7 @@ public class GameView extends SurfaceView implements Runnable {
                         public void playHerbertStep(Terrain terrain) {
                             draw(terrain);
                             callback.onScoreChange(terrain.getScore());
+                            terrainLogic.checkLevelSolved(terrain);
                         }
                     }, null);
                     playing = false;

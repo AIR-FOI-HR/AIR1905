@@ -329,7 +329,7 @@ public class TerrainLogic {
             }
 
             terrainCurrentLevel = terrain;
-            gameController.countFood(terrainCurrentLevel);
+            gameController.countFood(terrainCurrentLevel, true);
             return terrain;
 
         } catch(IOException e) {
@@ -338,5 +338,9 @@ public class TerrainLogic {
             assert reader != null;
             reader.close();
         }
+    }
+
+    public void checkLevelSolved(Terrain terrain) {
+        gameController.countFood(terrain, false);
     }
 }
