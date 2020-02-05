@@ -256,10 +256,10 @@ public class TerrainLogic {
          */
         t.setMark(X,Y,TerrainMark.Herbert);
 
-        //if (zid) return;
+        if (zid) return;
         switch(orientation){
             case Up:
-                if ((t.getMark(X,Y).getMark() & TerrainMark.Up) != TerrainMark.Up)
+                if ((t.getMark(X, Y).getMark() & TerrainMark.Up) != TerrainMark.Up)
                     t.setMark(X, Y, t.getMark(X,Y).getMark()+TerrainMark.Up);
                 break;
             case Down:
