@@ -2,8 +2,6 @@ package com.example.herbertgame;
 
 public class ListItem {
 
-
-
     private String level;
     private String best_result;
     //private String WordRecord;
@@ -20,6 +18,5 @@ public class ListItem {
     public String getBest_result(){
         return best_result;
     }
-
 
 }
