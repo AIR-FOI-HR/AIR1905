@@ -7,13 +7,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
 import android.graphics.Rect;
-
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.Toast;
 
-import androidx.core.content.res.ResourcesCompat;
 
 import java.io.IOException;
 
@@ -76,6 +74,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     public GameView(Context context) {
         super(context);
+        blokovi = new Rect[15][15];
         holder = getHolder();
         SetupBitmaps();
     }
@@ -92,6 +91,7 @@ public class GameView extends SurfaceView implements Runnable {
         down = BitmapFactory.decodeResource(getResources(),R.drawable.tile_path_down);
         herbert = BitmapFactory.decodeResource(getResources(), R.drawable.tile_herbert);
     }
+
 
     @Override
     public void run() {
@@ -111,6 +111,27 @@ public class GameView extends SurfaceView implements Runnable {
                     }, null);
                     playing = false;
                 }
+            }
+        }
+    }
+
+    private void calculateCanvasDimensions(Canvas canvas) {
+        // Visina i širina grida
+        int width = canvas.getWidth();
+        int height = canvas.getHeight();
+        // prava visina i širina jednog pravokutnika
+        int realwidth = (int) (width / 15);
+        int realheight = (int) (height / 15);
+
+        // razlika visine i širine nešto ( Početak grida top )
+        int heightTopStart = 0;
+        int left = 0;
+
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                Rect r = new Rect();
+                r.set(left + (j * realwidth), heightTopStart + (i * realheight), left + ((j + 1) * realwidth), heightTopStart + ((i + 1) * realheight));
+                blokovi[i][j] = r;
             }
         }
     }
