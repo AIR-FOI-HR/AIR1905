@@ -145,52 +145,41 @@ public class GameView extends SurfaceView implements Runnable {
 
         calculateCanvasDimensions(canvas);
 
-        for (int i = 0; i < terrainSize; i++) {
-            for (int j = 0; j < terrainSize; j++) {
-                switch (terrainMarks[j][i].getMark()) {
-                    case TerrainMark.Prazno:
-                        canvas.drawBitmap(prazno, null, blokovi[j][i], null);
-                        break;
-
-                    case TerrainMark.Zid:
-                        canvas.drawBitmap(zid, null, blokovi[j][i], null);
-                        break;
-
-                    case TerrainMark.Hrana:
-                        canvas.drawBitmap(prazno, null, blokovi[j][i], null);
-                        canvas.drawBitmap(hrana, null, blokovi[j][i], null);
-                        break;
-
-                    case TerrainMark.Otrov:
-                        canvas.drawBitmap(prazno, null, blokovi[j][i], null);
-                        canvas.drawBitmap(otrov, null, blokovi[j][i], null);
-                        break;
-
-                    case TerrainMark.Herbert:
-                        canvas.drawBitmap(prazno, null, blokovi[j][i], null);
-                        canvas.drawBitmap(herbert, null, blokovi[j][i], null);
-                        break;
-
-                    case TerrainMark.Up:
-                        canvas.drawBitmap(posjeceno, null, blokovi[j][i], null);
-                        canvas.drawBitmap(up, null, blokovi[j][i], null);
-                        break;
-
-                    case TerrainMark.Down:
-                        canvas.drawBitmap(posjeceno, null, blokovi[j][i], null);
-                        canvas.drawBitmap(down, null, blokovi[j][i], null);
-                        break;
-
-                    case TerrainMark.Left:
-                        canvas.drawBitmap(posjeceno, null, blokovi[j][i], null);
-                        canvas.drawBitmap(left, null, blokovi[j][i], null);
-                        break;
-
-                    case TerrainMark.Right:
-                        canvas.drawBitmap(posjeceno, null, blokovi[j][i], null);
-                        canvas.drawBitmap(right, null, blokovi[j][i], null);
-                        break;
-
+        for (int j = 0; j < terrainSize; j++) {
+            for (int i = 0; i < terrainSize; i++) {
+                if((terrainMarks[i][j].getMark() & TerrainMark.Prazno) == TerrainMark.Prazno){
+                    canvas.drawBitmap(prazno, null, blokovi[i][j], null);
+                }
+                if((terrainMarks[i][j].getMark() & TerrainMark.Hrana) == TerrainMark.Hrana){
+                    canvas.drawBitmap(prazno, null, blokovi[i][j], null);
+                    canvas.drawBitmap(hrana, null, blokovi[i][j], null);
+                }
+                if((terrainMarks[i][j].getMark() & TerrainMark.Zid) == TerrainMark.Zid){
+                    canvas.drawBitmap(zid, null, blokovi[i][j], null);
+                }
+                if((terrainMarks[i][j].getMark() & TerrainMark.Otrov) == TerrainMark.Otrov){
+                    canvas.drawBitmap(prazno, null, blokovi[i][j], null);
+                    canvas.drawBitmap(otrov, null, blokovi[i][j], null);
+                }
+                if(i>0 && ((terrainMarks[i-1][j].getMark() & TerrainMark.Up) == TerrainMark.Up)){
+                    canvas.drawBitmap(down, null, blokovi[i-1][j], null);
+                    canvas.drawBitmap(up, null, blokovi[i][j], null);
+                }
+                if((terrainMarks[i][j].getMark() & TerrainMark.Down) == TerrainMark.Down){
+                    canvas.drawBitmap(up, null, blokovi[i][j], null);
+                    canvas.drawBitmap(down, null, blokovi[i-1][j], null);
+                }
+                if(j>0 && ((terrainMarks[i][j-1].getMark() & TerrainMark.Left) == TerrainMark.Left)){
+                    canvas.drawBitmap(right, null, blokovi[i][j-1], null);
+                    canvas.drawBitmap(left, null, blokovi[i][j], null);
+                }
+                if((terrainMarks[i][j].getMark() & TerrainMark.Right) == TerrainMark.Right){
+                    canvas.drawBitmap(left, null, blokovi[i][j], null);
+                    canvas.drawBitmap(right, null, blokovi[i][j-1], null);
+                }
+                if((terrainMarks[i][j].getMark() & TerrainMark.Herbert) == TerrainMark.Herbert){
+                    canvas.drawBitmap(prazno, null, blokovi[i][j], null);
+                    canvas.drawBitmap(herbert, null, blokovi[i][j], null);
                 }
             }
         }
