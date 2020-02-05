@@ -139,64 +139,61 @@ public class GameView extends SurfaceView implements Runnable {
     private void draw(Terrain terrain){
         canvas = holder.lockCanvas();
         terrainMarks = terrain.getTerrainMarks();
-        canvas.drawColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimaryDark, null));
+        canvas.drawRGB(150, 150, 150);
 
         int terrainSize = terrain.getSize();
 
-        int xSpacing = canvas.getWidth() / terrainSize;
-        int ySpacing = canvas.getHeight() / terrainSize;
+        calculateCanvasDimensions(canvas);
 
         for (int i = 0; i < terrainSize; i++) {
             for (int j = 0; j < terrainSize; j++) {
-                float xStart = i * xSpacing;
-                float yStart = j * ySpacing;
+                switch (terrainMarks[j][i].getMark()) {
+                    case TerrainMark.Prazno:
+                        canvas.drawBitmap(prazno, null, blokovi[j][i], null);
+                        break;
 
-                //Ako se ne radi o bloku gdje je Herbert
-                if (terrainMarks[j][i].getMark() < 256) {
-                    switch (terrainMarks[j][i].getMark()) {
-                        case TerrainMark.Prazno:
-                            break;
+                    case TerrainMark.Zid:
+                        canvas.drawBitmap(zid, null, blokovi[j][i], null);
+                        break;
 
-                        case TerrainMark.Zid:
-                            canvas.drawRect(xStart, yStart, xStart + xSpacing, yStart + ySpacing, new Paint());
-                            break;
+                    case TerrainMark.Hrana:
+                        canvas.drawBitmap(prazno, null, blokovi[j][i], null);
+                        canvas.drawBitmap(hrana, null, blokovi[j][i], null);
+                        break;
 
-                        case TerrainMark.Hrana:
-                            canvas.drawRect(xStart, yStart, xStart + xSpacing, yStart + ySpacing, foodPaint);
-                            break;
+                    case TerrainMark.Otrov:
+                        canvas.drawBitmap(prazno, null, blokovi[j][i], null);
+                        canvas.drawBitmap(otrov, null, blokovi[j][i], null);
+                        break;
 
-                        case TerrainMark.Otrov:
-                            canvas.drawRect(xStart, yStart, xStart + xSpacing, yStart + ySpacing, poisonPaint);
-                            break;
-                    }
-                } else {
-                    switch (terrainMarks[j][i].getMark() - 256) {
-                        //Na bloku se nalazi Herbert, treba otkriti u kojoj je orijentaciji
-                        case 16:
-                            //Orijentacija UP
-                            canvas.drawRect(xStart, yStart, xStart + xSpacing, yStart + ySpacing / 2, herbertPaint);
-                            canvas.drawRect(xStart, yStart + ySpacing / 2, xStart + xSpacing, yStart + ySpacing, herbertBackPaint);
-                            break;
-                        case 128:
-                            //Orijentacija LEFT
-                            canvas.drawRect(xStart, yStart, xStart + xSpacing / 2, yStart + ySpacing, herbertPaint);
-                            canvas.drawRect(xStart + xSpacing / 2, yStart, xStart + xSpacing, yStart + ySpacing, herbertBackPaint);
-                            break;
-                        case 32:
-                            //Orijentacija RIGHT
-                            canvas.drawRect(xStart, yStart, xStart + xSpacing / 2, yStart + ySpacing, herbertBackPaint);
-                            canvas.drawRect(xStart + xSpacing / 2, yStart, xStart + xSpacing, yStart + ySpacing, herbertPaint);
-                            break;
-                        case 64:
-                            //Orijentacija DOWN
-                            canvas.drawRect(xStart, yStart, xStart + xSpacing, yStart + ySpacing / 2, herbertBackPaint);
-                            canvas.drawRect(xStart, yStart + ySpacing / 2, xStart + xSpacing, yStart + ySpacing, herbertPaint);
-                            break;
-                    }
+                    case TerrainMark.Herbert:
+                        canvas.drawBitmap(prazno, null, blokovi[j][i], null);
+                        canvas.drawBitmap(herbert, null, blokovi[j][i], null);
+                        break;
+
+                    case TerrainMark.Up:
+                        canvas.drawBitmap(posjeceno, null, blokovi[j][i], null);
+                        canvas.drawBitmap(up, null, blokovi[j][i], null);
+                        break;
+
+                    case TerrainMark.Down:
+                        canvas.drawBitmap(posjeceno, null, blokovi[j][i], null);
+                        canvas.drawBitmap(down, null, blokovi[j][i], null);
+                        break;
+
+                    case TerrainMark.Left:
+                        canvas.drawBitmap(posjeceno, null, blokovi[j][i], null);
+                        canvas.drawBitmap(left, null, blokovi[j][i], null);
+                        break;
+
+                    case TerrainMark.Right:
+                        canvas.drawBitmap(posjeceno, null, blokovi[j][i], null);
+                        canvas.drawBitmap(right, null, blokovi[j][i], null);
+                        break;
+
                 }
             }
         }
-
         holder.unlockCanvasAndPost(canvas);
     }
 
