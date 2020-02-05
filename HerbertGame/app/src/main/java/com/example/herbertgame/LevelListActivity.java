@@ -36,7 +36,7 @@ public class LevelListActivity extends AppCompatActivity {
     //variables
     private ArrayList<String> levelNames = new ArrayList<>();
     private ArrayList<String> worldRecords = new ArrayList<>();
-    //missing worldRecords, personalBests and levelImages
+    //missing personalBests and levelImages
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,18 +44,27 @@ public class LevelListActivity extends AppCompatActivity {
         setContentView(R.layout.level_list_activity);
 
         mQ = Volley.newRequestQueue(this);
+        final LevelListActivity activity = this;
 
         this.getLevelNames();
-        this.getWorldRecords();
-
-        for (String s:worldRecords
-             ) {
-            Log.d("REKORDI", s);
-        }
-
-        this.initLevelRecyclerView();
+        this.getWorldRecords(new RecordsListener() {
+            @Override
+            public void OnRecordsReceived() {
+                activity.initLevelRecyclerView();
+            }
+        });
 
     }
+
+
+
+    private interface RecordsListener
+    {
+        void OnRecordsReceived();
+    }
+
+
+
 
     private void getLevelNames(){
         String[] levelList = new String[0];
@@ -74,7 +83,7 @@ public class LevelListActivity extends AppCompatActivity {
     }
 
 
-    private void getWorldRecords(){
+    private void getWorldRecords(final RecordsListener listener){
         String url = "http://cortex.foi.hr/air_herbert/getBestResultForEachLevel.php";
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -85,8 +94,8 @@ public class LevelListActivity extends AppCompatActivity {
                             for(int i = 0; i<jsonArray.length(); i++){
                                 JSONObject level = jsonArray.getJSONObject(i);
 
-                                Log.d("REKORD", level.getString("best_result"));
                                 worldRecords.add(level.getString("best_result"));
+                                listener.OnRecordsReceived();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -103,7 +112,7 @@ public class LevelListActivity extends AppCompatActivity {
 
     private void initLevelRecyclerView(){
         RecyclerView recyclerView = findViewById(R.id.level_recycler_view);
-        LevelRecyclerViewAdapter adapter = new LevelRecyclerViewAdapter(levelNames, this );
+        LevelRecyclerViewAdapter adapter = new LevelRecyclerViewAdapter(levelNames, this, worldRecords );
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
