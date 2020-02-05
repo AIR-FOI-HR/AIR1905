@@ -2,10 +2,11 @@ package com.example.herbertgame;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
-import android.graphics.Color;
-import android.graphics.Paint;
+import android.graphics.Rect;
 
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -25,12 +26,18 @@ import hr.foi.air.herbert.engine.logic.terrain.TerrainMark;
 
 
 public class GameView extends SurfaceView implements Runnable {
+    private Bitmap posjeceno;
+    private Bitmap prazno;
+    private Bitmap hrana;
+    private Bitmap zid;
+    private Bitmap otrov;
+    private Bitmap right;
+    private Bitmap left;
+    private Bitmap up;
+    private Bitmap down;
+    private Bitmap herbert;
 
-    final Paint wallPaint = new Paint();
-    final Paint foodPaint = new Paint();
-    final Paint herbertPaint = new Paint();
-    final Paint herbertBackPaint = new Paint();
-    final Paint poisonPaint = new Paint();
+    private Rect blokovi[][];
 
     private SurfaceHolder holder;
     Canvas canvas;
@@ -70,12 +77,20 @@ public class GameView extends SurfaceView implements Runnable {
     public GameView(Context context) {
         super(context);
         holder = getHolder();
-        herbertPaint.setColor(Color.BLUE);
-        herbertBackPaint.setColor(Color.WHITE);
-        foodPaint.setColor(Color.GREEN);
-        wallPaint.setColor(Color.BLACK);
-        poisonPaint.setColor(Color.RED);
+        SetupBitmaps();
+    }
 
+    private void SetupBitmaps(){
+        posjeceno = BitmapFactory.decodeResource(getResources(), R.drawable.tile_posjeceno);
+        prazno = BitmapFactory.decodeResource(getResources(), R.drawable.tile_prazno);
+        hrana = BitmapFactory.decodeResource(getResources(), R.drawable.tile_hrana);
+        zid = BitmapFactory.decodeResource(getResources(), R.drawable.tile_zid);
+        otrov = BitmapFactory.decodeResource(getResources(), R.drawable.tile_otrov);
+        right = BitmapFactory.decodeResource(getResources(),R.drawable.tile_path_right);
+        left = BitmapFactory.decodeResource(getResources(),R.drawable.tile_path_left);
+        up = BitmapFactory.decodeResource(getResources(),R.drawable.tile_path_up);
+        down = BitmapFactory.decodeResource(getResources(),R.drawable.tile_path_down);
+        herbert = BitmapFactory.decodeResource(getResources(), R.drawable.tile_herbert);
     }
 
     @Override
