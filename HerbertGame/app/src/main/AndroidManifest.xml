@@ -25,6 +25,7 @@
         </activity>
 
         <activity android:name=".GameScreenActivity"
+            android:windowSoftInputMode="stateVisible"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
