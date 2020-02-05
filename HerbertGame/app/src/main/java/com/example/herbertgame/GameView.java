@@ -192,9 +192,7 @@ public class GameView extends SurfaceView implements Runnable {
         running = false;
         playing = false;
 
-        Terrain initialTerrain = terrainList.get(0);
         terrainList.clear();
-        terrainList.add(initialTerrain);
 
         try{
             gameThread.join();
