@@ -256,23 +256,23 @@ public class TerrainLogic {
          */
         t.setMark(X,Y,TerrainMark.Herbert);
 
-        //if (zid) return;
+        if (zid) return;
         switch(orientation){
             case Up:
-                if ((t.getMark(X,Y).getMark() & TerrainMark.Up) != TerrainMark.Up)
-                    t.setMark(X, Y, t.getMark(X,Y).getMark()+TerrainMark.Up);
+                if ((t.getMark(X+1,Y).getMark() & TerrainMark.Up) != TerrainMark.Up)
+                    t.setMark(X+1, Y, TerrainMark.Up);
                 break;
             case Down:
-                if ((t.getMark(X,Y).getMark() & TerrainMark.Down) != TerrainMark.Down)
-                    t.setMark(X, Y, t.getMark(X,Y).getMark()+TerrainMark.Down);
+                if ((t.getMark(X-1,Y).getMark() & TerrainMark.Down) != TerrainMark.Down)
+                    t.setMark(X-1, Y, TerrainMark.Down);
                 break;
             case Right:
-                if ((t.getMark(X,Y).getMark() & TerrainMark.Right) != TerrainMark.Right)
-                    t.setMark(X, Y, t.getMark(X,Y).getMark()+TerrainMark.Right);
+                if ((t.getMark(X,Y-1).getMark() & TerrainMark.Right) != TerrainMark.Right)
+                    t.setMark(X, Y-1, TerrainMark.Right);
                 break;
             case Left:
-                if((t.getMark(X,Y).getMark() & TerrainMark.Left) != TerrainMark.Left)
-                    t.setMark(X, Y, t.getMark(X,Y).getMark()+TerrainMark.Left);
+                if((t.getMark(X,Y+1).getMark() & TerrainMark.Left) != TerrainMark.Left)
+                    t.setMark(X, Y+1, TerrainMark.Left);
                 break;
         }
     }
