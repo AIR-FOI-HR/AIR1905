@@ -17,7 +17,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 
 
 import hr.foi.air.herbert.engine.common.events.OnGameControllerListener;
@@ -63,14 +71,48 @@ public class GameView extends SurfaceView implements Runnable {
                     dialog.setCancelable(true);
 
                     Button dialogOK = dialog.findViewById(R.id.button_ok);
+                    Button dialogSend = dialog.findViewById(R.id.button_submit_score);
                     TextView scoreText = dialog.findViewById(R.id.final_score);
                     scoreText.setText("Level completed!\nFinal score: " + levelScore);
+
                     dialogOK.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             dialog.dismiss();
                         }
                     });
+
+                    dialogSend.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            OutputStream out = null;
+                            String fullURL = "http://cortex.foi.hr/air_herbert/insertResult.php";
+                            try {
+                                URL url = new URL(fullURL);
+                                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                                connection.setDoOutput(true);
+                                connection.setRequestProperty("Content-Type", "application/json; utf-8");
+                                connection.setRequestMethod("POST");
+                                out = new BufferedOutputStream(connection.getOutputStream());
+
+                                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
+                                writer.write("{level:" + 2 + ",score:" + levelScore + "}");
+                                writer.flush();
+                                writer.close();
+                                out.close();
+                                connection.connect();
+
+
+                            } catch (MalformedURLException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            dialog.dismiss();
+                        }
+                    });
+
                     if(!((Activity) getContext()).isFinishing())
                         dialog.show();
                     else{
