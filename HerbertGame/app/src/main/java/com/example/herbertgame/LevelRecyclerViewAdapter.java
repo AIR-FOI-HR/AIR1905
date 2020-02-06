@@ -23,13 +23,14 @@ public class LevelRecyclerViewAdapter extends RecyclerView.Adapter<LevelRecycler
     private ArrayList<String> levelNames;
     private ArrayList<String> worldRecords;
     private List<Integer> imageIDs;
-    //missing personalBests
+    private ArrayList<String> personalBests;
     private Context context;
 
-    public LevelRecyclerViewAdapter(ArrayList<String> levelNames, Context context, ArrayList<String> worldRecords, List<Integer> imageIDs) {
+    public LevelRecyclerViewAdapter(ArrayList<String> levelNames, Context context, ArrayList<String> worldRecords, List<Integer> imageIDs, ArrayList<String> personalBests) {
         this.levelNames = levelNames;
         this.worldRecords = worldRecords;
         this.imageIDs = imageIDs;
+        this.personalBests = personalBests;
         this.context = context;
     }
 
@@ -46,9 +47,9 @@ public class LevelRecyclerViewAdapter extends RecyclerView.Adapter<LevelRecycler
     public void onBindViewHolder(@NonNull LevelViewHolder holder, final int position) {
 
         holder.levelName.setText("Level: " + levelNames.get(position));
-        holder.worldRecord.setText("World record: " + worldRecords.get(position));
+        holder.worldRecord.setText("WR: " + worldRecords.get(position));
         holder.levelImage.setImageResource(imageIDs.get(position));
-        //missing personalBests
+        holder.personalBest.setText("PB: " + personalBests.get(position));
 
         holder.levelItem.setOnClickListener(new View.OnClickListener() {
             @Override
