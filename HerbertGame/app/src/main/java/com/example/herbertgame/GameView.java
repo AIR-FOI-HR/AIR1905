@@ -17,15 +17,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedWriter;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
+
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
+import java.util.HashMap;
 
 
 import hr.foi.air.herbert.engine.common.events.OnGameControllerListener;
@@ -72,7 +72,7 @@ public class GameView extends SurfaceView implements Runnable {
 
                     Button dialogOK = dialog.findViewById(R.id.button_ok);
                     Button dialogSend = dialog.findViewById(R.id.button_submit_score);
-                    TextView scoreText = dialog.findViewById(R.id.final_score);
+                    final TextView scoreText = dialog.findViewById(R.id.final_score);
                     scoreText.setText("Level completed!\nFinal score: " + levelScore);
 
                     dialogOK.setOnClickListener(new View.OnClickListener() {
@@ -85,30 +85,27 @@ public class GameView extends SurfaceView implements Runnable {
                     dialogSend.setOnClickListener(new OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            String fullURL = "https://cortex.foi.hr/air_herbert/insertResult.php";
 
-                            OutputStream out = null;
-                            String fullURL = "http://cortex.foi.hr/air_herbert/insertResult.php";
-                            try {
-                                URL url = new URL(fullURL);
-                                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                                connection.setDoOutput(true);
-                                connection.setRequestProperty("Content-Type", "application/json; utf-8");
-                                connection.setRequestMethod("POST");
-                                out = new BufferedOutputStream(connection.getOutputStream());
+                            HashMap<String, Integer> params = new HashMap<String, Integer>();
+                            String levelID = level.split("_")[1];
+                            params.put("level", Integer.parseInt(levelID));
+                            params.put("score", levelScore);
 
-                                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
-                                writer.write("{level:" + 2 + ",score:" + levelScore + "}");
-                                writer.flush();
-                                writer.close();
-                                out.close();
-                                connection.connect();
+                            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(fullURL, new JSONObject(params), new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
 
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
 
-                            } catch (MalformedURLException e) {
-                                e.printStackTrace();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                                }
+                            });
+
+                            Volley.newRequestQueue(getContext()).add(jsonObjectRequest);
+
                             dialog.dismiss();
                         }
                     });
