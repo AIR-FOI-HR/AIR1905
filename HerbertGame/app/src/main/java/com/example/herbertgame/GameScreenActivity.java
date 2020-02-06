@@ -6,11 +6,14 @@ import android.content.Context;
 import android.os.Bundle;
 
 
+import android.text.InputType;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -32,7 +35,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.herbertgame.fragments.GameDisplayFragment;
 
-
+import hr.foi.air.herbert.engine.logic.herbert.Herbert;
 
 
 public class GameScreenActivity extends AppCompatActivity implements GameDisplayFragment.OnCurrentScoreChangeListener {
@@ -73,12 +76,17 @@ public class GameScreenActivity extends AppCompatActivity implements GameDisplay
                     View v = findViewById(R.id.switch_keyboard);
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(v.getWindowToken(),0);
-                    LinearLayout layout = findViewById(R.id.herbert_keayboard);
+                    LinearLayout layout = findViewById(R.id.herbert_keyboard);
                     layout.setVisibility(View.VISIBLE);
                     buttonView.setText("Turn off Herbert keyboard");
                     disableKeyboard();
+                    HerbertKeyboard herbertKeyboard = findViewById(R.id.keyboard);
+                    codeInput.setRawInputType(InputType.TYPE_CLASS_TEXT);
+                    codeInput.setTextIsSelectable(true);
+                    InputConnection ic = codeInput.onCreateInputConnection(new EditorInfo());
+                    herbertKeyboard.setInputConnection(ic);
                 }else{
-                    LinearLayout layout = findViewById(R.id.herbert_keayboard);
+                    LinearLayout layout = findViewById(R.id.herbert_keyboard);
                     layout.setVisibility(View.INVISIBLE);
                     buttonView.setText("Turn on Herbert keyboard");
                     enableKeyboard();

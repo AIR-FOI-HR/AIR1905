@@ -2,7 +2,7 @@
 
     <LinearLayout
         android:visibility="invisible"
-        android:id="@+id/herbert_keayboard"
+        android:id="@+id/herbert_keyboard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
