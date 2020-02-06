@@ -10,30 +10,42 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+
     <Button
         android:id="@+id/go_to_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="161dp"
+        android:layout_marginLeft="161dp"
+        android:layout_marginTop="56dp"
+        android:layout_marginEnd="162dp"
+        android:layout_marginRight="162dp"
         android:background="@drawable/roundbutton"
         android:text="Login"
-        android:textStyle="bold"
         android:textColor="#2b46c9"
-        app:layout_constraintBaseline_toBaselineOf="@+id/go_to_signout"
-        app:layout_constraintStart_toStartOf="@+id/group"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/go_to_levels"
         tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/go_to_signout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="163dp"
+        android:layout_marginLeft="163dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="160dp"
+        android:layout_marginRight="160dp"
         android:background="@drawable/roundbutton"
         android:text="Sign out"
-        android:textStyle="bold"
         android:textColor="#2b46c9"
-        app:layout_constraintStart_toEndOf="@+id/go_to_login"
-        app:layout_constraintTop_toTopOf="parent"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/go_to_login"
         tools:ignore="MissingConstraints" />
-
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/group"
@@ -61,14 +73,14 @@
         android:id="@+id/exit_app"
         android:layout_width="64dp"
         android:layout_height="59dp"
-        android:layout_marginStart="328dp"
-        android:layout_marginLeft="328dp"
-        android:layout_marginTop="552dp"
-        android:background="@drawable/yellow"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="20dp"
 
+        android:layout_marginRight="20dp"
+        android:background="@drawable/yellow"
         android:textColor="#000066"
         android:textSize="30dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -84,7 +96,7 @@
         android:textStyle="bold"
         android:textAlignment="center"
         android:textColor="#ffffff"
-        android:textSize="50dp"
+        android:textSize="38sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

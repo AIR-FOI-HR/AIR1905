@@ -3,7 +3,9 @@
     android:layout_width="match_parent" android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:layout_marginTop="7dp"
-    android:id="@+id/level_item">
+    android:id="@+id/level_item"
+    android:background="#ffffff"
+    >
 
     <LinearLayout
         android:layout_width="wrap_content"

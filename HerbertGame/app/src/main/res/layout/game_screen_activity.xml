@@ -8,6 +8,9 @@
     android:fitsSystemWindows="true"
     android:visibility="visible"
     tools:openDrawer="start"
+    android:background="#000066"
+    android:textColor="#ffffff"
+
     >
 
     <include
