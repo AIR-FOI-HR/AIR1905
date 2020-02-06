@@ -1,6 +1,7 @@
 package com.example.herbertgame;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -38,7 +39,9 @@ public class LevelListActivity extends AppCompatActivity {
     private ArrayList<String> levelNames = new ArrayList<>();
     private ArrayList<String> worldRecords = new ArrayList<>();
     private List<Integer> imageIDs = new ArrayList<>();
-    //missing personalBests
+    private ArrayList<String> personalBests = new ArrayList<>();
+
+    LevelRecyclerViewAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,16 +52,32 @@ public class LevelListActivity extends AppCompatActivity {
         final LevelListActivity activity = this;
 
         this.getLevelNames();
+        this.getPersonalBestsFromSharedPreferences(levelNames);
         this.getWorldRecords(new RecordsListener() {
             @Override
             public void OnRecordsReceived() {
                 activity.initLevelRecyclerView();
             }
         });
-
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
 
+        levelNames.removeAll(levelNames);
+        worldRecords.removeAll(worldRecords);
+        imageIDs.removeAll(imageIDs);
+
+        this.getLevelNames();
+        this.getPersonalBestsFromSharedPreferences(levelNames);
+        this.getWorldRecords(new RecordsListener() {
+            @Override
+            public void OnRecordsReceived() {
+                adapter.notifyDataSetChanged();
+            }
+        });
+    }
 
     private interface RecordsListener
     {
@@ -79,7 +98,9 @@ public class LevelListActivity extends AppCompatActivity {
              ) {
             String[] levelNamesList = level.split("\\.");
             levelNames.add(levelNamesList[0]);
-            int imageID = getResources().getIdentifier(levelNamesList[0], "drawable", getPackageName()); //gets ID of image in drawables with the same name as the level
+
+            //gets ID of image in drawables with the same name as the level
+            int imageID = getResources().getIdentifier(levelNamesList[0], "drawable", getPackageName());
             imageIDs.add(imageID);
         }
     }
@@ -112,9 +133,26 @@ public class LevelListActivity extends AppCompatActivity {
         mQ.add(request);
     }
 
+    private void getPersonalBestsFromSharedPreferences(ArrayList<String> levelNames){
+        //gets personal best score from SharedPreferences for a level
+        personalBests.removeAll(personalBests);
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("personal-bests", MODE_PRIVATE);
+
+        for (String level:levelNames
+        ) {
+            String personalBest;
+            int value = sharedPreferences.getInt(level, -1);
+
+            if(value == -1) personalBest = "N/A";
+            else personalBest = String.valueOf(value);
+
+            personalBests.add(personalBest);
+        }
+    }
+
     private void initLevelRecyclerView(){
         RecyclerView recyclerView = findViewById(R.id.level_recycler_view);
-        LevelRecyclerViewAdapter adapter = new LevelRecyclerViewAdapter(levelNames, this, worldRecords, imageIDs);
+        adapter = new LevelRecyclerViewAdapter(levelNames, this, worldRecords, imageIDs, personalBests);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
