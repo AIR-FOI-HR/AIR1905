@@ -17,7 +17,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.HashMap;
 
 
 import hr.foi.air.herbert.engine.common.events.OnGameControllerListener;
@@ -63,14 +71,45 @@ public class GameView extends SurfaceView implements Runnable {
                     dialog.setCancelable(true);
 
                     Button dialogOK = dialog.findViewById(R.id.button_ok);
-                    TextView scoreText = dialog.findViewById(R.id.final_score);
+                    Button dialogSend = dialog.findViewById(R.id.button_submit_score);
+                    final TextView scoreText = dialog.findViewById(R.id.final_score);
                     scoreText.setText("Level completed!\nFinal score: " + levelScore);
+
                     dialogOK.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             dialog.dismiss();
                         }
                     });
+
+                    dialogSend.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String fullURL = "https://cortex.foi.hr/air_herbert/insertResult.php";
+
+                            HashMap<String, Integer> params = new HashMap<String, Integer>();
+                            String levelID = level.split("_")[1];
+                            params.put("level", Integer.parseInt(levelID));
+                            params.put("score", levelScore);
+
+                            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(fullURL, new JSONObject(params), new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+
+                                }
+                            });
+
+                            Volley.newRequestQueue(getContext()).add(jsonObjectRequest);
+
+                            dialog.dismiss();
+                        }
+                    });
+
                     if(!((Activity) getContext()).isFinishing())
                         dialog.show();
                     else{
