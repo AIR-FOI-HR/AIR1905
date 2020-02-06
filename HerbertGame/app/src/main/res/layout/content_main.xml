@@ -22,6 +22,7 @@
             android:layout_weight="1">
 
             <LinearLayout
+                android:id="@+id/dynamic_leyboard"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -34,25 +35,31 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="65dp"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <EditText
                         android:id="@+id/code_input"
                         android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_weight=".70"></EditText>
                     <Button
                         android:id="@+id/start_button"
                         android:layout_width="0dp"
                         android:layout_weight=".30"
-                        android:layout_height="55dp"
+                        android:layout_height="wrap_content"
                         android:text="Start">
 
                     </Button>
 
                 </LinearLayout>
+
+                <com.example.herbertgame.HerbertKeyboard
+                    android:id="@+id/keyboard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
             </LinearLayout>
+
         </FrameLayout>
 
     </LinearLayout>
