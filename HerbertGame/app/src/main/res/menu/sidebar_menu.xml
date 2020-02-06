@@ -1,24 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<menu
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
-
-        <item
-            android:id="@+id/sidebar_keyboard"
-            android:title="Turn on Herbert keyboard"
-            app:actionLayout="@layout/switch_item1"
-            android:checkable="true"
-            app:showAsAction="always"/>
-        <item
-            android:id="@+id/sidebar_solution"
-            android:title="Enable solution preview"
-            app:actionLayout="@layout/switch_item2" />
-        <item
-            android:id="@+id/sidebar_sound"
-            android:title="Enable sound"
-            app:actionLayout="@layout/switch_item3" />
-    </group>
-</menu>
+    </menu>

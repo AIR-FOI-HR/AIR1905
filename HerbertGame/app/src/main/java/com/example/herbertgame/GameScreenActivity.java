@@ -1,13 +1,11 @@
 package com.example.herbertgame;
 
 
-import android.content.ClipData;
+
 import android.content.Context;
 import android.os.Bundle;
 
-import android.text.InputType;
-import android.view.Menu;
-import android.view.MenuInflater;
+
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -17,6 +15,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -26,24 +26,23 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
-import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.herbertgame.fragments.GameDisplayFragment;
-import com.google.android.material.navigation.NavigationView;
 
-public class GameScreenActivity extends AppCompatActivity implements GameDisplayFragment.OnCurrentScoreChangeListener, NavigationView.OnNavigationItemSelectedListener {
+
+
+
+public class GameScreenActivity extends AppCompatActivity implements GameDisplayFragment.OnCurrentScoreChangeListener {
     private DrawerLayout drawerLayout;
     private Button startButton;
     private EditText codeInput;
     private GameDisplayFragment gameDisplayFragment;
     private TextView currentScore;
     private int score;
-    private Switch switch_keyboard;
-    MenuItem keyboard;
-    private boolean isChecked = false;
+    private MenuItem item;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,13 +65,28 @@ public class GameScreenActivity extends AppCompatActivity implements GameDisplay
         codeInput = findViewById(R.id.code_input);
         currentScore = findViewById(R.id.current_score);
 
+        Switch test = findViewById(R.id.switch_keyboard);
+        test.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    View v = findViewById(R.id.switch_keyboard);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(),0);
+                    LinearLayout layout = findViewById(R.id.herbert_keayboard);
+                    layout.setVisibility(View.VISIBLE);
+                    buttonView.setText("Turn off Herbert keyboard");
+                    disableKeyboard();
+                }else{
+                    LinearLayout layout = findViewById(R.id.herbert_keayboard);
+                    layout.setVisibility(View.INVISIBLE);
+                    buttonView.setText("Turn on Herbert keyboard");
+                    enableKeyboard();
+                }
+            }
+        });
 
 
-        keyboard = findViewById(R.id.sidebar_keyboard);
-        switch_keyboard = findViewById(R.id.switch_keyboard);
-
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
 
         startButton = findViewById(R.id.start_button);
         startButton.setOnClickListener(new View.OnClickListener() {
@@ -132,28 +146,25 @@ public class GameScreenActivity extends AppCompatActivity implements GameDisplay
         currentScore.setText("Current score: " + score);
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        switch (menuItem.getItemId()){
-            case R.id.sidebar_keyboard:
 
-                menuItem.setTitle("bla");
-                break;
-        }
-        return false;
-    }
 
-    public void setOnClickListener(View v){
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(v.getWindowToken(),0);
-        disableKeyboard();
-    }
+
     private void disableKeyboard(){
         codeInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(),0);
+            }
+        });
+    }
+
+    private void enableKeyboard(){
+        codeInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInputFromInputMethod(v.getWindowToken(),0);
             }
         });
     }
