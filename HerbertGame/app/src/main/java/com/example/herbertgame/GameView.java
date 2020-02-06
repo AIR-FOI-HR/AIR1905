@@ -122,9 +122,13 @@ public class GameView extends SurfaceView implements Runnable {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     if(!sharedPreferences.contains(level)){
                         editor.putInt(level, levelScore);
+                        Log.d("DODAVANJE", "run: " + level);
+                        editor.commit();
                     }
                     else if(levelScore > sharedPreferences.getInt(level, 0)){
                         editor.putInt(level, levelScore);
+                        Log.d("DODAVANJE", "run: " + level);
+                        editor.commit();
                     }
                 }
             });
