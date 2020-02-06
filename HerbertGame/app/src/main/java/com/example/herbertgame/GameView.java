@@ -3,6 +3,7 @@ package com.example.herbertgame;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -39,6 +40,8 @@ public class GameView extends SurfaceView implements Runnable {
     private Bitmap down;
     private Bitmap herbert;
 
+    private String levelName;
+
     private Rect blokovi[][];
 
     private SurfaceHolder holder;
@@ -51,6 +54,7 @@ public class GameView extends SurfaceView implements Runnable {
     TerrainLogic terrainLogic = TerrainLogic.getInstance(new OnGameControllerListener() {
         @Override
         public void OnLevelSolved(final int levelScore) {
+            final String level = levelName;
             ((Activity) getContext()).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -72,6 +76,16 @@ public class GameView extends SurfaceView implements Runnable {
                     else{
                         Toast.makeText(getContext(), "Nešto je pošlo po zlu!", Toast.LENGTH_SHORT);
                         ((Activity) getContext()).finish();
+                    }
+
+                    Context context = getContext();
+                    SharedPreferences sharedPreferences = context.getSharedPreferences("personal-bests", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    if(!sharedPreferences.contains(level)){
+                        editor.putInt(level, levelScore);
+                    }
+                    else if(levelScore > sharedPreferences.getInt(level, 0)){
+                        editor.putInt(level, levelScore);
                     }
                 }
             });
@@ -221,6 +235,7 @@ public class GameView extends SurfaceView implements Runnable {
 
 
     public void setLevelName(String levelName){
+        this.levelName = levelName;
         terrainLogic.setLevelName(levelName);
         terrainLogic.setTerrainSize(15);
         Terrain initialTerrain = null;
