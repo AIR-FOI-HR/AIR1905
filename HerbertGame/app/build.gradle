@@ -50,7 +50,8 @@ dependencies {
     //recyclerview
     implementation 'com.android.support:recyclerview-v7:29.0.2'
    
-    
+   //volley
+    implementation 'com.android.volley:volley:1.1.1'
     
     implementation project(path: ':engine')
 

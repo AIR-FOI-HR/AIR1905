@@ -16,15 +16,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.awt.font.TextAttribute;
 import java.util.ArrayList;
+import java.util.List;
 
 public class LevelRecyclerViewAdapter extends RecyclerView.Adapter<LevelRecyclerViewAdapter.LevelViewHolder>{
 
     private ArrayList<String> levelNames;
-    //missing worldRecords, personalBests
+    private ArrayList<String> worldRecords;
+    private List<Integer> imageIDs;
+    //missing personalBests
     private Context context;
 
-    public LevelRecyclerViewAdapter(ArrayList<String> levelNames, Context context) {
+    public LevelRecyclerViewAdapter(ArrayList<String> levelNames, Context context, ArrayList<String> worldRecords, List<Integer> imageIDs) {
         this.levelNames = levelNames;
+        this.worldRecords = worldRecords;
+        this.imageIDs = imageIDs;
         this.context = context;
     }
 
@@ -41,7 +46,9 @@ public class LevelRecyclerViewAdapter extends RecyclerView.Adapter<LevelRecycler
     public void onBindViewHolder(@NonNull LevelViewHolder holder, final int position) {
 
         holder.levelName.setText("Level: " + levelNames.get(position));
-        //missing worldRecord,personalBest and levelImage
+        holder.worldRecord.setText("World record: " + worldRecords.get(position));
+        holder.levelImage.setImageResource(imageIDs.get(position));
+        //missing personalBests
 
         holder.levelItem.setOnClickListener(new View.OnClickListener() {
             @Override
