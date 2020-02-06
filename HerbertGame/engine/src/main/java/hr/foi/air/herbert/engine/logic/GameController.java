@@ -59,7 +59,7 @@ public class GameController {
         if(initial) startingFood = total;
 
         if(total == 0){
-            listner.OnLevelSolved(0);
+            listner.OnLevelSolved(terrain.getScore());
         }
     }
     public void resetFoodLeft(){

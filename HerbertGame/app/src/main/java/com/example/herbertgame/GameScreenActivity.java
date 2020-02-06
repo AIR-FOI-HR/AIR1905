@@ -21,7 +21,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.herbertgame.fragments.GameDisplayFragment;
 
-public class GameScreenActivity extends AppCompatActivity implements GameDisplayFragment.OnCurrentScoreChangeListener{
+public class GameScreenActivity extends AppCompatActivity implements GameDisplayFragment.OnLevelStateChangeListener{
     private DrawerLayout drawerLayout;
     private Button startButton;
     private EditText codeInput;

@@ -1,6 +1,7 @@
 package com.example.herbertgame;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,10 +11,13 @@ import android.graphics.Rect;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
-
 import java.io.IOException;
+
 
 import hr.foi.air.herbert.engine.common.events.OnGameControllerListener;
 import hr.foi.air.herbert.engine.common.interfaces.PlayHerbert;
@@ -46,12 +50,29 @@ public class GameView extends SurfaceView implements Runnable {
     TerrainList terrainList = TerrainList.getInstance();
     TerrainLogic terrainLogic = TerrainLogic.getInstance(new OnGameControllerListener() {
         @Override
-        public void OnLevelSolved(int levelScore) {
-            Log.i("food-count", "OnLevelSolved");
+        public void OnLevelSolved(final int levelScore) {
             ((Activity) getContext()).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(getContext(), "LEVEL ZAVRŠEN", Toast.LENGTH_LONG).show();
+                    final Dialog dialog = new Dialog(getContext());
+                    dialog.setContentView(R.layout.level_complete_dialog);
+                    dialog.setCancelable(true);
+
+                    Button dialogOK = dialog.findViewById(R.id.button_ok);
+                    TextView scoreText = dialog.findViewById(R.id.final_score);
+                    scoreText.setText("Level completed!\nFinal score: " + levelScore);
+                    dialogOK.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+                    if(!((Activity) getContext()).isFinishing())
+                        dialog.show();
+                    else{
+                        Toast.makeText(getContext(), "Nešto je pošlo po zlu!", Toast.LENGTH_SHORT);
+                        ((Activity) getContext()).finish();
+                    }
                 }
             });
         }
@@ -62,15 +83,17 @@ public class GameView extends SurfaceView implements Runnable {
         }
     });
 
-    OnScoreChangeListener callback;
 
-    public void setOnScoreChangeListener(OnScoreChangeListener callback){
+    OnGameEventListener callback;
+
+    public void setOnGameEventListener(OnGameEventListener callback){
         this.callback = callback;
     }
 
-    public interface OnScoreChangeListener{
+    public interface OnGameEventListener{
         public void onScoreChange(int score);
     }
+
 
     public GameView(Context context) {
         super(context);
