@@ -5,7 +5,9 @@ import android.content.ClipData;
 import android.content.Context;
 import android.os.Bundle;
 
+import android.text.InputType;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -30,14 +32,18 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.herbertgame.fragments.GameDisplayFragment;
+import com.google.android.material.navigation.NavigationView;
 
-public class GameScreenActivity extends AppCompatActivity implements GameDisplayFragment.OnCurrentScoreChangeListener{
+public class GameScreenActivity extends AppCompatActivity implements GameDisplayFragment.OnCurrentScoreChangeListener, NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
     private Button startButton;
     private EditText codeInput;
     private GameDisplayFragment gameDisplayFragment;
     private TextView currentScore;
     private int score;
+    private Switch switch_keyboard;
+    MenuItem keyboard;
+    private boolean isChecked = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,7 +66,13 @@ public class GameScreenActivity extends AppCompatActivity implements GameDisplay
         codeInput = findViewById(R.id.code_input);
         currentScore = findViewById(R.id.current_score);
 
-        //onCreateOptionsMenu();
+
+
+        keyboard = findViewById(R.id.sidebar_keyboard);
+        switch_keyboard = findViewById(R.id.switch_keyboard);
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         startButton = findViewById(R.id.start_button);
         startButton.setOnClickListener(new View.OnClickListener() {
@@ -72,6 +84,7 @@ public class GameScreenActivity extends AppCompatActivity implements GameDisplay
             }
         });
     }
+
 
     private void createGameViewFragment(String levelName) {
         Bundle bundle = new Bundle();
@@ -119,26 +132,29 @@ public class GameScreenActivity extends AppCompatActivity implements GameDisplay
         currentScore.setText("Current score: " + score);
     }
 
-    private void hideKeyboard(View view){
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(),0);
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()){
+            case R.id.sidebar_keyboard:
+
+                menuItem.setTitle("bla");
+                break;
+        }
+        return false;
     }
 
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.sidebar_menu, menu);
-        MenuItem menuItem = menu.findItem(R.id.sidebar_keyboard);
-        View view = MenuItemCompat.getActionView(menuItem);
-        Switch switcha = (Switch) view.findViewById(R.id.sidebar_switch);
-        switcha.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
+    public void setOnClickListener(View v){
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(v.getWindowToken(),0);
+        disableKeyboard();
+    }
+    private void disableKeyboard(){
+        codeInput.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked == true){
-                    hideKeyboard(findViewById(android.R.id.content));
-                }
+            public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(),0);
             }
         });
-        return super.onCreateOptionsMenu(menu);
     }
 }
