@@ -24,17 +24,17 @@ public class GameDisplayFragment extends Fragment implements GameView.OnGameEven
 
     @Override
     public void onScoreChange(int score) {
-        callback.onCurrentScoreChange(score);
+        callback.onLevelStateChange(score);
     }
 
     OnLevelStateChangeListener callback;
 
-    public void setCurrentScoreChangeListener(OnLevelStateChangeListener callback){
+    public void setOnLevelStateChangeListener(OnLevelStateChangeListener callback){
         this.callback = callback;
     }
 
     public interface OnLevelStateChangeListener{
-        public void onCurrentScoreChange(int currentScore);
+        public void onLevelStateChange(int currentScore);
     }
 
     @Nullable

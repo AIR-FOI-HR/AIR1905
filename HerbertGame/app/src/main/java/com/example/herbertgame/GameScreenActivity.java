@@ -39,7 +39,7 @@ import com.example.herbertgame.fragments.GameDisplayFragment;
 import hr.foi.air.herbert.engine.logic.herbert.Herbert;
 
 
-public class GameScreenActivity extends AppCompatActivity implements GameDisplayFragment.OnCurrentScoreChangeListener {
+public class GameScreenActivity extends AppCompatActivity implements GameDisplayFragment.OnLevelStateChangeListener {
 
     private DrawerLayout drawerLayout;
     private Button startButton;
@@ -146,12 +146,12 @@ public class GameScreenActivity extends AppCompatActivity implements GameDisplay
     public void onAttachFragment(@NonNull Fragment fragment) {
         if(fragment instanceof GameDisplayFragment){
             GameDisplayFragment gameDisplayFragment = (GameDisplayFragment) fragment;
-            gameDisplayFragment.setCurrentScoreChangeListener(this);
+            gameDisplayFragment.setOnLevelStateChangeListener(this);
         }
     }
 
     @Override
-    public void onCurrentScoreChange(final int score) {
+    public void onLevelStateChange(final int score) {
         this.score = score;
 
         //Update sučelja mora se odvijati na glavnoj UI dretvi
