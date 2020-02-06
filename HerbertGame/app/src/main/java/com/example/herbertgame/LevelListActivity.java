@@ -86,7 +86,7 @@ public class LevelListActivity extends AppCompatActivity {
 
 
     private void getWorldRecords(final RecordsListener listener){
-        String url = "http://cortex.foi.hr/air_herbert/getBestResultForEachLevel.php";
+        String url = "https://cortex.foi.hr/air_herbert/getBestResultForEachLevel.php";
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
