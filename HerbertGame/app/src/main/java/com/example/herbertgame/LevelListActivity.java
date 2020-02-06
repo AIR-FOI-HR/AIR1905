@@ -28,6 +28,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class LevelListActivity extends AppCompatActivity {
 
@@ -36,7 +37,8 @@ public class LevelListActivity extends AppCompatActivity {
     //variables
     private ArrayList<String> levelNames = new ArrayList<>();
     private ArrayList<String> worldRecords = new ArrayList<>();
-    //missing personalBests and levelImages
+    private List<Integer> imageIDs = new ArrayList<>();
+    //missing personalBests
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,8 +66,6 @@ public class LevelListActivity extends AppCompatActivity {
     }
 
 
-
-
     private void getLevelNames(){
         String[] levelList = new String[0];
         AssetManager levels = this.getAssets();
@@ -79,6 +79,8 @@ public class LevelListActivity extends AppCompatActivity {
              ) {
             String[] levelNamesList = level.split("\\.");
             levelNames.add(levelNamesList[0]);
+            int imageID = getResources().getIdentifier(levelNamesList[0], "drawable", getPackageName()); //gets ID of image in drawables with the same name as the level
+            imageIDs.add(imageID);
         }
     }
 
@@ -112,7 +114,7 @@ public class LevelListActivity extends AppCompatActivity {
 
     private void initLevelRecyclerView(){
         RecyclerView recyclerView = findViewById(R.id.level_recycler_view);
-        LevelRecyclerViewAdapter adapter = new LevelRecyclerViewAdapter(levelNames, this, worldRecords );
+        LevelRecyclerViewAdapter adapter = new LevelRecyclerViewAdapter(levelNames, this, worldRecords, imageIDs);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
