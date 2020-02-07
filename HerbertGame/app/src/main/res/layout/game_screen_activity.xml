@@ -8,6 +8,9 @@
     android:fitsSystemWindows="true"
     android:visibility="visible"
     tools:openDrawer="start"
+    android:background="#000066"
+    android:textColor="#ffffff"
+
     >
 
     <include
@@ -21,7 +24,26 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:menu="@menu/sidebar_menu" />
+        app:menu="@menu/sidebar_menu" >
+
+        <Switch
+            android:id="@+id/switch_keyboard"
+            android:layout_width="261dp"
+            android:layout_height="57dp"
+            android:text="Turn on Herbert keyboard" />
+
+        <Switch
+            android:id="@+id/switch_solution"
+            android:layout_width="wrap_content"
+            android:layout_height="271dp"
+            android:text="Enable solution preview" />
+
+        <Switch
+            android:id="@+id/switch_sound"
+            android:layout_width="wrap_content"
+            android:layout_height="163dp"
+            android:text="Enable sound" />
+    </com.google.android.material.navigation.NavigationView>
 
 </androidx.drawerlayout.widget.DrawerLayout>
 

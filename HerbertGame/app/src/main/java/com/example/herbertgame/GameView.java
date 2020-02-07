@@ -1,20 +1,32 @@
 package com.example.herbertgame;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
-import android.graphics.Color;
-import android.graphics.Paint;
-
+import android.graphics.Rect;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.core.content.res.ResourcesCompat;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
+
 
 import hr.foi.air.herbert.engine.common.events.OnGameControllerListener;
 import hr.foi.air.herbert.engine.common.interfaces.PlayHerbert;
@@ -25,12 +37,20 @@ import hr.foi.air.herbert.engine.logic.terrain.TerrainMark;
 
 
 public class GameView extends SurfaceView implements Runnable {
+    private Bitmap posjeceno;
+    private Bitmap prazno;
+    private Bitmap hrana;
+    private Bitmap zid;
+    private Bitmap otrov;
+    private Bitmap right;
+    private Bitmap left;
+    private Bitmap up;
+    private Bitmap down;
+    private Bitmap herbert;
 
-    final Paint wallPaint = new Paint();
-    final Paint foodPaint = new Paint();
-    final Paint herbertPaint = new Paint();
-    final Paint herbertBackPaint = new Paint();
-    final Paint poisonPaint = new Paint();
+    private String levelName;
+
+    private Rect blokovi[][];
 
     private SurfaceHolder holder;
     Canvas canvas;
@@ -41,12 +61,71 @@ public class GameView extends SurfaceView implements Runnable {
     TerrainList terrainList = TerrainList.getInstance();
     TerrainLogic terrainLogic = TerrainLogic.getInstance(new OnGameControllerListener() {
         @Override
-        public void OnLevelSolved(int levelScore) {
-            Log.i("food-count", "OnLevelSolved");
+        public void OnLevelSolved(final int levelScore) {
+            final String level = levelName;
             ((Activity) getContext()).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(getContext(), "LEVEL ZAVRŠEN", Toast.LENGTH_LONG).show();
+                    final Dialog dialog = new Dialog(getContext());
+                    dialog.setContentView(R.layout.level_complete_dialog);
+                    dialog.setCancelable(true);
+
+                    Button dialogOK = dialog.findViewById(R.id.button_ok);
+                    Button dialogSend = dialog.findViewById(R.id.button_submit_score);
+                    final TextView scoreText = dialog.findViewById(R.id.final_score);
+                    scoreText.setText("Level completed!\nFinal score: " + levelScore);
+
+                    dialogOK.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    dialogSend.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String fullURL = "https://cortex.foi.hr/air_herbert/insertResult.php";
+
+                            HashMap<String, Integer> params = new HashMap<String, Integer>();
+                            String levelID = level.split("_")[1];
+                            params.put("level", Integer.parseInt(levelID));
+                            params.put("score", levelScore);
+
+                            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(fullURL, new JSONObject(params), new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+
+                                }
+                            });
+
+                            Volley.newRequestQueue(getContext()).add(jsonObjectRequest);
+
+                            dialog.dismiss();
+                        }
+                    });
+
+                    if(!((Activity) getContext()).isFinishing())
+                        dialog.show();
+                    else{
+                        Toast.makeText(getContext(), "Nešto je pošlo po zlu!", Toast.LENGTH_SHORT);
+                        ((Activity) getContext()).finish();
+                    }
+
+                    Context context = getContext();
+                    SharedPreferences sharedPreferences = context.getSharedPreferences("personal-bests", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    if(!sharedPreferences.contains(level)){
+                        editor.putInt(level, levelScore);
+                    }
+                    else if(levelScore > sharedPreferences.getInt(level, 0)){
+                        editor.putInt(level, levelScore);
+                    }
                 }
             });
         }
@@ -57,26 +136,38 @@ public class GameView extends SurfaceView implements Runnable {
         }
     });
 
-    OnScoreChangeListener callback;
 
-    public void setOnScoreChangeListener(OnScoreChangeListener callback){
+    OnGameEventListener callback;
+
+    public void setOnGameEventListener(OnGameEventListener callback){
         this.callback = callback;
     }
 
-    public interface OnScoreChangeListener{
+    public interface OnGameEventListener{
         public void onScoreChange(int score);
     }
 
+
     public GameView(Context context) {
         super(context);
+        blokovi = new Rect[15][15];
         holder = getHolder();
-        herbertPaint.setColor(Color.BLUE);
-        herbertBackPaint.setColor(Color.WHITE);
-        foodPaint.setColor(Color.GREEN);
-        wallPaint.setColor(Color.BLACK);
-        poisonPaint.setColor(Color.RED);
-
+        SetupBitmaps();
     }
+
+    private void SetupBitmaps(){
+        posjeceno = BitmapFactory.decodeResource(getResources(), R.drawable.tile_posjeceno);
+        prazno = BitmapFactory.decodeResource(getResources(), R.drawable.tile_prazno);
+        hrana = BitmapFactory.decodeResource(getResources(), R.drawable.tile_hrana);
+        zid = BitmapFactory.decodeResource(getResources(), R.drawable.tile_zid);
+        otrov = BitmapFactory.decodeResource(getResources(), R.drawable.tile_otrov);
+        right = BitmapFactory.decodeResource(getResources(),R.drawable.tile_path_right);
+        left = BitmapFactory.decodeResource(getResources(),R.drawable.tile_path_left);
+        up = BitmapFactory.decodeResource(getResources(),R.drawable.tile_path_up);
+        down = BitmapFactory.decodeResource(getResources(),R.drawable.tile_path_down);
+        herbert = BitmapFactory.decodeResource(getResources(), R.drawable.tile_herbert);
+    }
+
 
     @Override
     public void run() {
@@ -100,67 +191,74 @@ public class GameView extends SurfaceView implements Runnable {
         }
     }
 
+    private void calculateCanvasDimensions(Canvas canvas) {
+        // Visina i širina grida
+        int width = canvas.getWidth();
+        int height = canvas.getHeight();
+        // prava visina i širina jednog pravokutnika
+        int realwidth = (int) (width / 15);
+        int realheight = (int) (height / 15);
+
+        // razlika visine i širine nešto ( Početak grida top )
+        int heightTopStart = 0;
+        int left = 0;
+
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                Rect r = new Rect();
+                r.set(left + (j * realwidth), heightTopStart + (i * realheight), left + ((j + 1) * realwidth), heightTopStart + ((i + 1) * realheight));
+                blokovi[i][j] = r;
+            }
+        }
+    }
+
     private void draw(Terrain terrain){
         canvas = holder.lockCanvas();
         terrainMarks = terrain.getTerrainMarks();
-        canvas.drawColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimaryDark, null));
+        canvas.drawRGB(150, 150, 150);
 
         int terrainSize = terrain.getSize();
 
-        int xSpacing = canvas.getWidth() / terrainSize;
-        int ySpacing = canvas.getHeight() / terrainSize;
+        calculateCanvasDimensions(canvas);
 
-        for (int i = 0; i < terrainSize; i++) {
-            for (int j = 0; j < terrainSize; j++) {
-                float xStart = i * xSpacing;
-                float yStart = j * ySpacing;
-
-                //Ako se ne radi o bloku gdje je Herbert
-                if (terrainMarks[j][i].getMark() < 256) {
-                    switch (terrainMarks[j][i].getMark()) {
-                        case TerrainMark.Prazno:
-                            break;
-
-                        case TerrainMark.Zid:
-                            canvas.drawRect(xStart, yStart, xStart + xSpacing, yStart + ySpacing, new Paint());
-                            break;
-
-                        case TerrainMark.Hrana:
-                            canvas.drawRect(xStart, yStart, xStart + xSpacing, yStart + ySpacing, foodPaint);
-                            break;
-
-                        case TerrainMark.Otrov:
-                            canvas.drawRect(xStart, yStart, xStart + xSpacing, yStart + ySpacing, poisonPaint);
-                            break;
-                    }
-                } else {
-                    switch (terrainMarks[j][i].getMark() - 256) {
-                        //Na bloku se nalazi Herbert, treba otkriti u kojoj je orijentaciji
-                        case 16:
-                            //Orijentacija UP
-                            canvas.drawRect(xStart, yStart, xStart + xSpacing, yStart + ySpacing / 2, herbertPaint);
-                            canvas.drawRect(xStart, yStart + ySpacing / 2, xStart + xSpacing, yStart + ySpacing, herbertBackPaint);
-                            break;
-                        case 128:
-                            //Orijentacija LEFT
-                            canvas.drawRect(xStart, yStart, xStart + xSpacing / 2, yStart + ySpacing, herbertPaint);
-                            canvas.drawRect(xStart + xSpacing / 2, yStart, xStart + xSpacing, yStart + ySpacing, herbertBackPaint);
-                            break;
-                        case 32:
-                            //Orijentacija RIGHT
-                            canvas.drawRect(xStart, yStart, xStart + xSpacing / 2, yStart + ySpacing, herbertBackPaint);
-                            canvas.drawRect(xStart + xSpacing / 2, yStart, xStart + xSpacing, yStart + ySpacing, herbertPaint);
-                            break;
-                        case 64:
-                            //Orijentacija DOWN
-                            canvas.drawRect(xStart, yStart, xStart + xSpacing, yStart + ySpacing / 2, herbertBackPaint);
-                            canvas.drawRect(xStart, yStart + ySpacing / 2, xStart + xSpacing, yStart + ySpacing, herbertPaint);
-                            break;
-                    }
+        for (int j = 0; j < terrainSize; j++) {
+            for (int i = 0; i < terrainSize; i++) {
+                if((terrainMarks[i][j].getMark() & TerrainMark.Prazno) == TerrainMark.Prazno){
+                    canvas.drawBitmap(prazno, null, blokovi[i][j], null);
+                }
+                if((terrainMarks[i][j].getMark() & TerrainMark.Hrana) == TerrainMark.Hrana){
+                    canvas.drawBitmap(prazno, null, blokovi[i][j], null);
+                    canvas.drawBitmap(hrana, null, blokovi[i][j], null);
+                }
+                if((terrainMarks[i][j].getMark() & TerrainMark.Zid) == TerrainMark.Zid){
+                    canvas.drawBitmap(zid, null, blokovi[i][j], null);
+                }
+                if((terrainMarks[i][j].getMark() & TerrainMark.Otrov) == TerrainMark.Otrov){
+                    canvas.drawBitmap(prazno, null, blokovi[i][j], null);
+                    canvas.drawBitmap(otrov, null, blokovi[i][j], null);
+                }
+                if(i>0 && ((terrainMarks[i-1][j].getMark() & TerrainMark.Up) == TerrainMark.Up)){
+                    canvas.drawBitmap(down, null, blokovi[i-1][j], null);
+                    canvas.drawBitmap(up, null, blokovi[i][j], null);
+                }
+                if((terrainMarks[i][j].getMark() & TerrainMark.Down) == TerrainMark.Down){
+                    canvas.drawBitmap(up, null, blokovi[i][j], null);
+                    canvas.drawBitmap(down, null, blokovi[i-1][j], null);
+                }
+                if(j>0 && ((terrainMarks[i][j-1].getMark() & TerrainMark.Left) == TerrainMark.Left)){
+                    canvas.drawBitmap(right, null, blokovi[i][j-1], null);
+                    canvas.drawBitmap(left, null, blokovi[i][j], null);
+                }
+                if((terrainMarks[i][j].getMark() & TerrainMark.Right) == TerrainMark.Right){
+                    canvas.drawBitmap(left, null, blokovi[i][j], null);
+                    canvas.drawBitmap(right, null, blokovi[i][j-1], null);
+                }
+                if((terrainMarks[i][j].getMark() & TerrainMark.Herbert) == TerrainMark.Herbert){
+                    canvas.drawBitmap(prazno, null, blokovi[i][j], null);
+                    canvas.drawBitmap(herbert, null, blokovi[i][j], null);
                 }
             }
         }
-
         holder.unlockCanvasAndPost(canvas);
     }
 
@@ -176,6 +274,7 @@ public class GameView extends SurfaceView implements Runnable {
 
 
     public void setLevelName(String levelName){
+        this.levelName = levelName;
         terrainLogic.setLevelName(levelName);
         terrainLogic.setTerrainSize(15);
         Terrain initialTerrain = null;
@@ -192,9 +291,7 @@ public class GameView extends SurfaceView implements Runnable {
         running = false;
         playing = false;
 
-        Terrain initialTerrain = terrainList.get(0);
         terrainList.clear();
-        terrainList.add(initialTerrain);
 
         try{
             gameThread.join();

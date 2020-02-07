@@ -1,12 +1,26 @@
 package com.example.herbertgame;
 
+
+
+import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
+
+
+import android.text.InputType;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+
+import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,13 +35,19 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.herbertgame.fragments.GameDisplayFragment;
 
-public class GameScreenActivity extends AppCompatActivity implements GameDisplayFragment.OnCurrentScoreChangeListener{
+
+import hr.foi.air.herbert.engine.logic.herbert.Herbert;
+
+
+public class GameScreenActivity extends AppCompatActivity implements GameDisplayFragment.OnLevelStateChangeListener {
+
     private DrawerLayout drawerLayout;
     private Button startButton;
     private EditText codeInput;
     private GameDisplayFragment gameDisplayFragment;
     private TextView currentScore;
     private int score;
+    private MenuItem item;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,6 +70,34 @@ public class GameScreenActivity extends AppCompatActivity implements GameDisplay
         codeInput = findViewById(R.id.code_input);
         currentScore = findViewById(R.id.current_score);
 
+        Switch test = findViewById(R.id.switch_keyboard);
+        test.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    View v = findViewById(R.id.switch_keyboard);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(),0);
+                    LinearLayout layout = findViewById(R.id.herbert_keyboard);
+                    layout.setVisibility(View.VISIBLE);
+                    buttonView.setText("Turn off Herbert keyboard");
+                    disableKeyboard();
+                    HerbertKeyboard herbertKeyboard = findViewById(R.id.keyboard);
+                    codeInput.setRawInputType(InputType.TYPE_CLASS_TEXT);
+                    codeInput.setTextIsSelectable(true);
+                    InputConnection ic = codeInput.onCreateInputConnection(new EditorInfo());
+                    herbertKeyboard.setInputConnection(ic);
+                }else{
+                    LinearLayout layout = findViewById(R.id.herbert_keyboard);
+                    layout.setVisibility(View.INVISIBLE);
+                    buttonView.setText("Turn on Herbert keyboard");
+                    enableKeyboard();
+                }
+            }
+        });
+
+
+
         startButton = findViewById(R.id.start_button);
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,6 +108,7 @@ public class GameScreenActivity extends AppCompatActivity implements GameDisplay
             }
         });
     }
+
 
     private void createGameViewFragment(String levelName) {
         Bundle bundle = new Bundle();
@@ -97,12 +146,12 @@ public class GameScreenActivity extends AppCompatActivity implements GameDisplay
     public void onAttachFragment(@NonNull Fragment fragment) {
         if(fragment instanceof GameDisplayFragment){
             GameDisplayFragment gameDisplayFragment = (GameDisplayFragment) fragment;
-            gameDisplayFragment.setCurrentScoreChangeListener(this);
+            gameDisplayFragment.setOnLevelStateChangeListener(this);
         }
     }
 
     @Override
-    public void onCurrentScoreChange(final int score) {
+    public void onLevelStateChange(final int score) {
         this.score = score;
 
         //Update sučelja mora se odvijati na glavnoj UI dretvi
@@ -110,6 +159,29 @@ public class GameScreenActivity extends AppCompatActivity implements GameDisplay
             @Override
             public void run() {
                 currentScore.setText("Current score: " + score);
+            }
+        });
+    }
+
+
+
+
+    private void disableKeyboard(){
+        codeInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(),0);
+            }
+        });
+    }
+
+    private void enableKeyboard(){
+        codeInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInputFromInputMethod(v.getWindowToken(),0);
             }
         });
     }
